@@ -6,8 +6,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.hfad.common_components.topbar.CustomTopBar
-import com.hfad.theme.Background
+import com.hfad.theme.White
 
 @Composable
 fun CustomScaffold(
@@ -21,7 +23,9 @@ fun CustomScaffold(
             CustomTopBar(
                 title = {
                     Text(
-                        text = title
+                        text = title,
+                        color = Color.Black,
+                        fontSize = 14.sp
                     )
                 },
                 actions = { actions() },
@@ -29,7 +33,7 @@ fun CustomScaffold(
 
             )
         },
-        containerColor = Background
+        containerColor = White
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)

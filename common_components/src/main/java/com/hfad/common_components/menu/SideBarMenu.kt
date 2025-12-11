@@ -27,8 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
-import com.hfad.theme.Background
 import com.hfad.theme.R
+import com.hfad.theme.White
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,7 +72,7 @@ fun SideBarMenu(
                 Column (
                     modifier = Modifier
                         .fillMaxHeight()
-                        .background(Background)
+                        .background(White)
                         .width(width)
                 ){
 

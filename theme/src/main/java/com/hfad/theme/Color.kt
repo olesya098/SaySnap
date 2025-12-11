@@ -2,5 +2,6 @@ package com.hfad.theme
 
 import androidx.compose.ui.graphics.Color
 
-val ColorButton = Color(0xFF38c9c4)
-val Background = Color(0xFFD9D9D9)
+val LitePurple = Color(0xFFCAD6FF)
+val LiteGray = Color(0xFFD9D9D9)
+val White = Color(0xFFFFFFFF)
