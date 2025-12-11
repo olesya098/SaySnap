@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.hfad.antiplag_2_0.navigation.AppNavigation
 import com.hfad.antiplag_2_0.ui.theme.AntiPlag_2_0Theme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AntiPlag_2_0Theme {
-
+                AppNavigation()
             }
         }
     }
