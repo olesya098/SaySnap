@@ -35,7 +35,7 @@ fun CustomTopBar(
                             13.dp
                         )
                     )
-                    .padding(end = 15.dp),
+                    .padding(end = 35.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {

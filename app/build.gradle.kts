@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(project(":common_components"))
+    implementation(project(":theme"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

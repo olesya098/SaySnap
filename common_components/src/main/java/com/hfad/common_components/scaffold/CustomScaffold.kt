@@ -1,7 +1,9 @@
 package com.hfad.common_components.scaffold
 
+import android.R.attr.action
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +26,7 @@ fun CustomScaffold(
                 title = {
                     Text(
                         text = title,
-                        color = Color.Black,
-                        fontSize = 14.sp
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 },
                 actions = { actions() },

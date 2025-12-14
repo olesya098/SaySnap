@@ -1,18 +1,25 @@
 package com.hfad.common_components.menu
 
+import android.R.attr.action
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -25,8 +32,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.hfad.common_components.navigation.LocalNavigator
+import com.hfad.common_components.navigation.Navigator
 import com.hfad.common_components.navigation.Routes
+import com.hfad.theme.Black
+import com.hfad.theme.LiteBlue
+import com.hfad.theme.LitePurple
+import com.hfad.theme.PointGray
 import com.hfad.theme.R
 import com.hfad.theme.White
 import kotlinx.coroutines.launch
@@ -34,8 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SideBarMenu(
     action: @Composable (DrawerState) -> Unit,
-
-    ) {
+) {
     val scope = rememberCoroutineScope()
     val interactionsSource = remember { MutableInteractionSource() }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -44,13 +56,46 @@ fun SideBarMenu(
     val width = (configuration.screenWidthDp * 0.8).dp
 
     val navigator = LocalNavigator.current
+
+    val currentRoute = navigator.currentRoute
+
     val routes = listOf(
         SideBarModel(
             title = "Главная",
-            imageId = R.drawable.home_unfill,
+            imageId = R.drawable.back,
             route = Routes.HOMESCREEN
         ),
-        )
+        SideBarModel(
+            title = "Главная",
+            imageId = R.drawable.home,
+            route = Routes.HOMESCREEN
+        ),
+        SideBarModel(
+            title = "Редактировать",
+            imageId = R.drawable.edit,
+            route = Routes.EDITSCREEN
+        ),
+        SideBarModel(
+            title = "Настройки",
+            imageId = R.drawable.setting,
+            route = ""
+        ),
+        SideBarModel(
+            title = "Новая папка",
+            imageId = R.drawable.newfolder,
+            route = ""
+        ),
+        SideBarModel(
+            title = "Учёба",
+            imageId = R.drawable.study,
+            route = ""
+        ),
+        SideBarModel(
+            title = "Работа",
+            imageId = R.drawable.work,
+            route = ""
+        ),
+    )
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = false,
@@ -62,36 +107,50 @@ fun SideBarMenu(
                     .clickable(
                         interactionSource = interactionsSource,
                         indication = null
-                    ){
+                    ) {
                         scope.launch {
                             drawerState.close()
                         }
                     },
                 contentAlignment = Alignment.CenterStart
-            ){
-                Column (
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxHeight()
                         .background(White)
-                        .width(width)
-                ){
+                        .width(width),
+                    verticalArrangement = Arrangement.spacedBy(7.dp)
+                ) {
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                    routes.forEach {
-                        Row (
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable{
-                                   navigator.navigate(it.route)
-                                }
-                        ){
-                            Icon(
-                                painter = painterResource(it.imageId),
-                                contentDescription = null
-                            )
-                            Text(
-                                text = it.title
-                            )
-                        }
+                    routes[0].Menu(navigator, Black)
+
+
+                    Divider(
+                        color = LitePurple,
+                        thickness = 2.dp,
+                    )
+
+                    for (i in 1 until 4) {
+                        routes[i].Menu(
+                            navigator = navigator,
+                            isSelect = currentRoute == routes[i].route
+                        )
+                    }
+                    Divider(
+                        color = LitePurple,
+                        thickness = 2.dp,
+                    )
+                    Text(
+                        text = "Папки",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 12.dp)
+                    )
+                    for (i in 4 until routes.size) {
+                        routes[i].Menu(
+                            navigator = navigator,
+                            isSelect = currentRoute == routes[i].route
+                        )
                     }
                 }
             }
@@ -101,4 +160,53 @@ fun SideBarMenu(
             drawerState
         )
     }
+}
+
+@Composable
+private fun SideBarModel.Menu(
+    navigator: Navigator,
+    tint: Color = LiteBlue,
+    isSelect: Boolean = false
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(if (isSelect) PointGray else Color.Transparent)
+            .clickable { navigator.navigate(route) }
+    ) {
+
+        Row(
+            modifier = Modifier
+                .background(if (isSelect) PointGray else Color.Transparent)
+                .height(44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isSelect) {
+                Box(
+                    modifier = Modifier
+                        .width(4.dp)
+                        .fillMaxHeight()
+                        .background(LitePurple)
+                )
+            } else {
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Icon(
+                painterResource(imageId),
+                contentDescription = null,
+                tint = tint
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+        }
+    }
+
 }

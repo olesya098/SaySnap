@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hfad.antiplag_2_0.screens.edit.EditScreen
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Navigator
@@ -27,6 +28,10 @@ fun AppNavigation() {
             composable (route = Routes.HOMESCREEN){
                 HomeScreen()
             }
+            composable (route = Routes.EDITSCREEN) {
+                EditScreen()
+            }
+
         }
     }
 }

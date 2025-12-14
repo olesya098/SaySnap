@@ -18,6 +18,10 @@ class Navigator {
     ) {
         navController?.navigate(route)
     }
+
+    val currentRoute: String
+        get() = navController?.currentBackStackEntry?.destination?.route ?: ""
+
 }
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> {
