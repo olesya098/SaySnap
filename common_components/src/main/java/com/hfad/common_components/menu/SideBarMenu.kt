@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
@@ -63,7 +64,6 @@ fun SideBarMenu(
         SideBarModel(
             title = "Главная",
             imageId = R.drawable.back,
-            route = Routes.HOMESCREEN
         ),
         SideBarModel(
             title = "Главная",
@@ -78,23 +78,23 @@ fun SideBarMenu(
         SideBarModel(
             title = "Настройки",
             imageId = R.drawable.setting,
-            route = ""
-        ),
+
+            ),
         SideBarModel(
             title = "Новая папка",
             imageId = R.drawable.newfolder,
-            route = ""
-        ),
+
+            ),
         SideBarModel(
             title = "Учёба",
             imageId = R.drawable.study,
-            route = ""
-        ),
+
+            ),
         SideBarModel(
             title = "Работа",
             imageId = R.drawable.work,
-            route = ""
-        ),
+
+            ),
     )
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -123,23 +123,29 @@ fun SideBarMenu(
                 ) {
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    routes[0].Menu(navigator, Black)
+                    routes[0].Menu(Black) {
+                        scope.launch {
+                            drawerState.close()
+                        }
+
+                    }
 
 
-                    Divider(
-                        color = LitePurple,
+                    HorizontalDivider(
                         thickness = 2.dp,
+                        color = LitePurple
                     )
 
                     for (i in 1 until 4) {
                         routes[i].Menu(
-                            navigator = navigator,
                             isSelect = currentRoute == routes[i].route
-                        )
+                        ) {
+                            routes[i].route?.let { navigator.navigate(it) }
+                        }
                     }
-                    Divider(
-                        color = LitePurple,
-                        thickness = 2.dp,
+                    HorizontalDivider(
+                        Modifier, 2.dp,
+                        LitePurple
                     )
                     Text(
                         text = "Папки",
@@ -148,9 +154,10 @@ fun SideBarMenu(
                     )
                     for (i in 4 until routes.size) {
                         routes[i].Menu(
-                            navigator = navigator,
                             isSelect = currentRoute == routes[i].route
-                        )
+                        ) {
+
+                        }
                     }
                 }
             }
@@ -164,16 +171,16 @@ fun SideBarMenu(
 
 @Composable
 private fun SideBarModel.Menu(
-    navigator: Navigator,
     tint: Color = LiteBlue,
-    isSelect: Boolean = false
+    isSelect: Boolean = false,
+    onNavigate: () -> Unit
 ) {
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(if (isSelect) PointGray else Color.Transparent)
-            .clickable { navigator.navigate(route) }
+            .clickable { onNavigate() }
     ) {
 
         Row(
