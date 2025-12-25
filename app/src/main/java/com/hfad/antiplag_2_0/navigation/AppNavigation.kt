@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hfad.antiplag_2_0.screens.edit.EditScreen
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
+import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Navigator
 import com.hfad.common_components.navigation.Routes
@@ -23,13 +24,16 @@ fun AppNavigation() {
     ) {
         NavHost(
             navController,
-            startDestination = Routes.HOMESCREEN
+            startDestination = Routes.ONBOARDINGSCREEN
         ){
             composable (route = Routes.HOMESCREEN){
                 HomeScreen()
             }
             composable (route = Routes.EDITSCREEN) {
                 EditScreen()
+            }
+            composable(route = Routes.ONBOARDINGSCREEN) {
+                OnboardingScreen()
             }
 
         }

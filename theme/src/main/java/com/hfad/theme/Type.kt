@@ -24,4 +24,9 @@ val Typography = Typography(
         fontSize = 14.sp,
         color = Black
     ),
+    labelMedium = TextStyle(
+        fontFamily = FontFamily(Font(R.font.league_spartan_medium)),
+        fontSize = 20.sp,
+        color = Black
+    )
 )

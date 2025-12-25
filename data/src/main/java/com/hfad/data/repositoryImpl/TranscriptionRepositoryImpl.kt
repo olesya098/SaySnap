@@ -9,6 +9,7 @@ import javax.inject.Inject
 class TranscriptionRepositoryImpl @Inject constructor(
     private val transcriptionService: TranscriptionService
 ) : TranscriptionRepository {
+
     override suspend fun upload(
         token: String,
         filePath: String
