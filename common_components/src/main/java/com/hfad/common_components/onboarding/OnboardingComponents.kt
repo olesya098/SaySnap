@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 
 @Composable
@@ -38,20 +39,24 @@ fun SplashComponents(
     currentIndex: Int,
     totalScreens: Int
 ) {
+    val navigator = LocalNavigator.current
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(background),
         horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
         Column(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
                 text = title,
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.Companion.White
             )
@@ -86,8 +91,7 @@ fun SplashComponents(
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Companion.White,
                 modifier = Modifier.clickable {
-                    Routes.HOMESCREEN
-
+                    navigator.navigate(Routes.HOMESCREEN)
                 }
             )
 
@@ -101,10 +105,11 @@ fun SplashComponents(
                     Box(
                         modifier = Modifier
                             .size(if (index == currentIndex) 9.dp else 7.dp)
+                            .clip(shape = RoundedCornerShape(15.dp))
                             .background(
                                 if (index == currentIndex) Color.White else dividerColor
                             )
-                            .clip(shape = RoundedCornerShape(15.dp))
+
                     )
                 }
 

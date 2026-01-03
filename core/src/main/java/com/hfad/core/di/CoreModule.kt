@@ -1,6 +1,5 @@
 package com.hfad.core.di
 
-import com.hfad.core.ClientCore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)//анотация синглтона
-class CoreModule() {
+object CoreModule {
     @Provides
     @Singleton
     fun provideJson(): Json = Json {//сборка Json
@@ -31,11 +30,5 @@ class CoreModule() {
                 json(json)
             }
         }
-    }
-
-    @Provides
-    @Singleton
-    fun provideClientCore(httpClient: HttpClient, json: Json): ClientCore {
-        return ClientCore(httpClient, json)
     }
 }

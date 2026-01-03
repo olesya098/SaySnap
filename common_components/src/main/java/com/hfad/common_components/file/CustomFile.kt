@@ -33,7 +33,7 @@ fun CustomFile() {
         verticalAlignment = Alignment.CenterVertically
     ){
         Image(
-            painter = painterResource(id = R.drawable.file),
+            painter = painterResource(id = com.hfad.theme.R.drawable.file),
             contentDescription = null,
             modifier = Modifier.size(39.dp)
         )

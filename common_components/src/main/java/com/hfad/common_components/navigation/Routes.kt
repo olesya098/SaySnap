@@ -4,4 +4,5 @@ object Routes {
     const val HOMESCREEN = "home_screen"
     const val EDITSCREEN = "edit_screen"
     const val ONBOARDINGSCREEN = "onboarding_screen"
+    const val SETTINGSCREEN = "setting_screen"
 }

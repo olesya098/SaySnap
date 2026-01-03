@@ -26,7 +26,7 @@ fun CustomScaffold(
                 title = {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
                     )
                 },
                 actions = { actions() },

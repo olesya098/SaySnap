@@ -1,6 +1,5 @@
 package com.hfad.common_components.menu
 
-import android.R.attr.action
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -25,6 +23,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,9 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import com.hfad.common_components.dialog.DialogFolder
+import com.hfad.common_components.dialog.DialogNotes
 import com.hfad.common_components.navigation.LocalNavigator
-import com.hfad.common_components.navigation.Navigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.theme.Black
 import com.hfad.theme.LiteBlue
@@ -58,6 +57,9 @@ fun SideBarMenu(
 
     val navigator = LocalNavigator.current
 
+    val showFolderDialog = remember { mutableStateOf(false) }
+    val showNotesDialog = remember { mutableStateOf(false) }
+
     val currentRoute = navigator.currentRoute
 
     val routes = listOf(
@@ -72,19 +74,19 @@ fun SideBarMenu(
         ),
         SideBarModel(
             title = "Редактировать",
-            imageId = R.drawable.edit,
+            imageId = R.drawable.edit2,
             route = Routes.EDITSCREEN
         ),
         SideBarModel(
             title = "Настройки",
             imageId = R.drawable.setting,
-
-            ),
+            route = Routes.SETTINGSCREEN
+        ),
         SideBarModel(
             title = "Новая папка",
             imageId = R.drawable.newfolder,
-
-            ),
+            isDialog = true
+        ),
         SideBarModel(
             title = "Учёба",
             imageId = R.drawable.study,
@@ -96,6 +98,30 @@ fun SideBarMenu(
 
             ),
     )
+    if (showFolderDialog.value) {
+        DialogFolder(
+            onDismiss = {
+                showFolderDialog.value = false
+                scope.launch {
+                    drawerState.close()
+                }
+            },
+            onSave = { folderName ->
+                showFolderDialog.value = false
+                showNotesDialog.value = true
+            }
+        )
+    }
+    if (showNotesDialog.value){
+        DialogNotes (
+            onDismiss = {
+                showNotesDialog.value = false
+                scope.launch {
+                    drawerState.close()
+                }
+            }
+        )
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = false,
@@ -156,18 +182,20 @@ fun SideBarMenu(
                         routes[i].Menu(
                             isSelect = currentRoute == routes[i].route
                         ) {
-
+                            if (routes[i].title == "Новая папка") {
+                                showFolderDialog.value = true
+                            } else {
+                            }
                         }
                     }
                 }
             }
         }
     ) {
-        action(
-            drawerState
-        )
+        action(drawerState)
     }
 }
+
 
 @Composable
 private fun SideBarModel.Menu(

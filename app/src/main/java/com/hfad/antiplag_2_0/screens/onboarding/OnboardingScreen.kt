@@ -1,10 +1,12 @@
 package com.hfad.antiplag_2_0.screens.onboarding
 
+import android.R.attr.description
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hfad.antiplag_2_0.R
+import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.common_components.onboarding.SplashComponents
 import com.hfad.theme.EditScreen
@@ -20,6 +22,7 @@ fun OnboardingScreen() {
 
     val viewModel: OnboardingViewModel = viewModel()
     val currentScreen by viewModel.currentScreen.collectAsState()
+    val naigator = LocalNavigator.current
     when (currentScreen) {
         0 -> SplashComponents(
             background = TranscriptionScreen,
@@ -37,7 +40,7 @@ fun OnboardingScreen() {
             dividerColor = TranscriptionDivider,
             title = "Умное редактирование",
             description = "Нейросеть сама оформит текст: расставит пунктуацию, абзацы и заголовки",
-            image = R.drawable.edit,
+            image = com.hfad.theme.R.drawable.edit2,
             onNext = { viewModel.nextScreen() },
             currentIndex = currentScreen,
             totalScreens = 4
@@ -49,7 +52,7 @@ fun OnboardingScreen() {
             title = "Простое редактирование",
             description = "Или отредактируйте вручную — с удобным и интуитивным редактором.",
             image = com.hfad.theme.R.drawable.edit_document_file_icon,
-            onNext = { viewModel.nextScreen() },
+            onNext = { viewModel.nextScreen()},
             currentIndex = currentScreen,
             totalScreens = 4
         )
@@ -60,7 +63,7 @@ fun OnboardingScreen() {
             title = "Удобное сохранение",
             description = "Приложение даёт возможность сохранить проект как на телефоне, так и в приложении",
             image = com.hfad.theme.R.drawable.save,
-            onNext = { Routes.HOMESCREEN },
+            onNext = {naigator.navigate(Routes.HOMESCREEN) },
             currentIndex = currentScreen,
             totalScreens = 4
         )

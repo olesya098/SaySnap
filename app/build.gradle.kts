@@ -53,7 +53,9 @@ dependencies {
 
     implementation(project(":common_components"))
     implementation(project(":theme"))
+    implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
