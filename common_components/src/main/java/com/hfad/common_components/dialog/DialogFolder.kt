@@ -79,6 +79,7 @@ fun DialogFolder(
                 CustomButton(
                     text = "Сохранить",
                     color = LitePurple,
+                    modifier = Modifier,
                     onClick = {
                         if (text.isNotBlank()) {
                             onSave(text)

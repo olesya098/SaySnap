@@ -230,17 +230,17 @@ fun EditScreen() {
                             text = "Сохранить",
                             color = LitePurple
                         ) {
-                            if (showDialog.value) {
-                                Dialog(
-                                    onDismiss = {
-                                        showDialog.value = false
-                                        scope.launch {
-                                            drawerState.close()
-                                        }
+                            showDialog.value = true
+                        }
+                        if (showDialog.value) {
+                            Dialog(
+                                onDismiss = {
+                                    showDialog.value = false
+                                    scope.launch {
+                                        drawerState.close()
                                     }
-                                )
-                            }
-
+                                }
+                            )
                         }
                     }
                 }

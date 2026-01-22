@@ -1,6 +1,6 @@
 package com.hfad.common_components.button
 
-import android.R.attr.text
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -11,16 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hfad.theme.LitePurple
-import kotlinx.coroutines.FlowPreview
 
 @Composable
-fun CustomButton(
+fun ButtonBorder(
     text: String,
-    color: Color,
     modifier: Modifier? = null,
     padding: Dp? = null,
     onClick: () -> Unit
@@ -32,7 +29,11 @@ fun CustomButton(
         },
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            color
+            Color.Transparent
+        ),
+        border = BorderStroke(
+            width = 2.dp,
+            LitePurple
         ),
         shape = RoundedCornerShape(13.dp),
     ) {
@@ -45,16 +46,4 @@ fun CustomButton(
 
     }
 
-}
-
-@Preview
-@Composable
-fun PreviewCustomButton() {
-    CustomButton(
-        "Сохранить",
-        LitePurple,
-        modifier = Modifier,
-        onClick = {}
-
-    )
 }

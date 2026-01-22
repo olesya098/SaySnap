@@ -32,6 +32,7 @@ import com.hfad.theme.White
 @Composable
 fun MusicFile(
     text: String,
+    time: String,
     onDelete: () -> Unit,
 ) {
     Box(
@@ -91,7 +92,7 @@ fun MusicFile(
 
                 ) {
                     Text(
-                        text = "03:04",
+                        text = time,
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }

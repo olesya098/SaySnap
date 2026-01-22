@@ -43,7 +43,8 @@ fun Dialog(
             CustomButton(
                 text = "Сохранить на устройство",
                 color = LitePurple,
-                onClick = {}
+                onClick = {},
+                modifier = Modifier
             )
             Row(
                 modifier = Modifier
@@ -71,7 +72,8 @@ fun Dialog(
             CustomButton(
                 text = "Сохранить в папку",
                 color = LitePurple,
-                onClick = {}
+                onClick = {},
+                modifier = Modifier
             )
 
 

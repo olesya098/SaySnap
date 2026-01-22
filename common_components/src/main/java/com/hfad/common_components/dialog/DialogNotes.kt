@@ -48,6 +48,7 @@ fun DialogNotes(
                 CustomButton(
                     text = "Сохранить",
                     color = LitePurple,
+                    modifier = Modifier,
                     onClick = {
                         onDismiss()
 
