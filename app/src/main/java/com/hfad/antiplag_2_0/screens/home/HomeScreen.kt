@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -52,7 +54,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val state = homeViewModel.state.collectAsState()
 
-    var showDialog = remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
     val audioPickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let {
@@ -94,9 +96,10 @@ fun HomeScreen(
                 state.value.audioUri?.let {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
                         val duration = getAudioDuration(context, it)
                         MusicFile(

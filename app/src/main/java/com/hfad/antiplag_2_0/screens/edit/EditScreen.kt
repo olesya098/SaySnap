@@ -34,7 +34,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hfad.antiplag_2_0.screens.edit.filePicker.FilePicker
@@ -43,6 +48,8 @@ import com.hfad.common_components.dialog.Dialog
 import com.hfad.common_components.dialog.DialogNotes
 import com.hfad.common_components.menu.SideBarMenu
 import com.hfad.common_components.scaffold.CustomScaffold
+import com.hfad.edit.components.CustomIcon
+import com.hfad.edit.until.wrapSelectedText
 import com.hfad.theme.Black
 import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
@@ -53,9 +60,9 @@ import kotlinx.coroutines.launch
 fun EditScreen() {
     val scope = rememberCoroutineScope()
 
-    var fileText by remember { mutableStateOf("") }
+    var fileText by remember { mutableStateOf(TextFieldValue("")) }
     var fileName by remember { mutableStateOf("") }
-    var isFileSelected by remember { mutableStateOf(false) }
+    var isFileSelected by remember { mutableStateOf(true) }
 
     val showDialog = remember { mutableStateOf(false) }
 
@@ -103,7 +110,8 @@ fun EditScreen() {
                         ) {
                             FilePicker(
                                 onTextReceived = { text, name ->
-                                    fileText = text
+
+//                                    fileText = text
                                     fileName = name ?: "Выбранный файл"
                                     isFileSelected = true
                                 },
@@ -142,32 +150,27 @@ fun EditScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(15.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.edit),
-                                    contentDescription = null,
-                                    tint = Black,
-                                    modifier = Modifier.size(17.dp)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.numberlist),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.bold),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.cursive),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.underlined),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(17.dp)
-                                )
+                                CustomIcon(
+                                    R.drawable.edit
+                                ) { }
+                                CustomIcon(
+                                    R.drawable.numberlist
+                                ) { }
+                                CustomIcon(
+                                    R.drawable.bold
+                                ) {
+                                    fileText = wrapSelectedText(fileText, SpanStyle(fontWeight = FontWeight.Bold))
+                                }
+                                CustomIcon(
+                                    R.drawable.cursive
+                                ) {
+                                    fileText = wrapSelectedText(fileText, SpanStyle(fontStyle = FontStyle.Italic))
+                                }
+                                CustomIcon(
+                                    R.drawable.underlined
+                                ) {
+                                    fileText = wrapSelectedText(fileText, SpanStyle(textDecoration = TextDecoration.Underline))
+                                }
                             }
 
                         }
@@ -187,21 +190,21 @@ fun EditScreen() {
                                     .fillMaxSize()
                                     .padding(8.dp)
                             ) {
-                                if (fileText.isEmpty()) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(16.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.Center
-                                    ) {
-                                        Text(
-                                            text = "Файл пуст",
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                                        )
-                                    }
-                                } else {
+//                                if (fileText.text.isEmpty()) {
+//                                    Column(
+//                                        modifier = Modifier
+//                                            .fillMaxSize()
+//                                            .padding(16.dp),
+//                                        horizontalAlignment = Alignment.CenterHorizontally,
+//                                        verticalArrangement = Arrangement.Center
+//                                    ) {
+//                                        Text(
+//                                            text = "Файл пуст",
+//                                            style = MaterialTheme.typography.bodyMedium,
+//                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+//                                        )
+//                                    }
+//                                } else {
                                     BasicTextField(
                                         value = fileText,
                                         onValueChange = { newText ->
@@ -224,7 +227,7 @@ fun EditScreen() {
                                         }
                                     )
                                 }
-                            }
+                            //}
                         }
                         CustomButton(
                             text = "Сохранить",
@@ -244,7 +247,7 @@ fun EditScreen() {
                         }
                     }
                 }
-            }
+           }
         }
     )
 }

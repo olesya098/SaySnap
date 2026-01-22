@@ -12,13 +12,14 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.InputStreamReader
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 @Composable
 fun FilePicker(
     onTextReceived: (text: String, fileName: String?) -> Unit,
     modifier: Modifier = Modifier,
-    fileTypes: Array<String> = arrayOf("*/*")
 ) {
     val context = LocalContext.current
 
@@ -37,7 +38,14 @@ fun FilePicker(
         modifier = modifier
             .fillMaxSize()
             .clickable {
-                launcher.launch(arrayOf("*/*"))
+                launcher.launch(
+                    arrayOf(
+                        "text/*",
+                        "application/pdf",
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    )
+                )
             }
     )
 }
@@ -46,8 +54,7 @@ private fun readFileAsText(context: Context, uri: android.net.Uri): Pair<String,
     return try {
         val fileName = uri.lastPathSegment ?: "Файл"
         val text = context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            val bytes = inputStream.readBytes()
-            String(bytes, Charsets.UTF_8)
+            InputStreamReader(inputStream, Charset.forName("CP866")).use { it.readText() }
         } ?: "Не удалось прочитать файл"
 
         Pair(text, fileName)
