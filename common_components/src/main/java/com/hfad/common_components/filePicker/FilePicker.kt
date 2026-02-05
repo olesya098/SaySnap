@@ -1,6 +1,7 @@
-package com.hfad.antiplag_2_0.screens.edit.filePicker
+package com.hfad.common_components.filePicker
 
 import android.content.Context
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -14,11 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStreamReader
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun FilePicker(
-    onTextReceived: (text: String, fileName: String?) -> Unit,
+    onTextReceived: (text: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -29,7 +29,7 @@ fun FilePicker(
         uri?.let {
             CoroutineScope(Dispatchers.IO).launch {
                 val result = readFileAsText(context, it)
-                onTextReceived(result.first, result.second)
+                onTextReceived(result)
             }
         }
     }
@@ -40,25 +40,29 @@ fun FilePicker(
             .clickable {
                 launcher.launch(
                     arrayOf(
-                        "text/*",
-                        "application/pdf",
-                        "application/msword",
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        "text/plain"
                     )
                 )
             }
     )
 }
 
-private fun readFileAsText(context: Context, uri: android.net.Uri): Pair<String, String?> {
+private fun readFileAsText(context: Context, uri: Uri): String {
     return try {
-        val fileName = uri.lastPathSegment ?: "Файл"
-        val text = context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            InputStreamReader(inputStream, Charset.forName("CP866")).use { it.readText() }
-        } ?: "Не удалось прочитать файл"
+        val bytes = context.contentResolver
+            .openInputStream(uri)
+            ?.use { it.readBytes() }
+            ?: return "НЕ УДАЛОСЬ ПРОЧИТАТЬ ФАЙЛ"
 
-        Pair(text, fileName)
+        val utf8Text = bytes.toString(Charsets.UTF_8)
+        val text =
+            if (utf8Text.contains("�") || utf8Text.contains("?")) {
+                bytes.toString(Charset.forName("Windows-1251"))
+            } else {
+                utf8Text
+            }
+        text
     } catch (e: Exception) {
-        Pair("Ошибка чтения файла: ${e.message}", null)
+        "ОШИБКА ЧТЕНИЯ ФАЙЛА $e"
     }
 }

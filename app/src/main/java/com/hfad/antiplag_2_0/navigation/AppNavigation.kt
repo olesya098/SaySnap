@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hfad.antiplag_2_0.screens.edit.EditScreen
+import com.hfad.antiplag_2_0.screens.edit.EditViewModel
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.antiplag_2_0.screens.home.HomeViewModel
 import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
@@ -23,7 +24,9 @@ fun AppNavigation() {
         bind(navController)
     }
 
+    val editViewModel = viewModel<EditViewModel>()
     val homeViewModel = viewModel<HomeViewModel>()
+
     CompositionLocalProvider(
         LocalNavigator provides navigator
     ) {
@@ -35,7 +38,7 @@ fun AppNavigation() {
                 HomeScreen(homeViewModel)
             }
             composable(route = Routes.EDITSCREEN) {
-                EditScreen()
+                EditScreen(editViewModel)
             }
             composable(route = Routes.ONBOARDINGSCREEN) {
                 OnboardingScreen()
