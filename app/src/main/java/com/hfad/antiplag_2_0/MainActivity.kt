@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SaySnapTheme {
+
                 AppNavigation()
             }
         }

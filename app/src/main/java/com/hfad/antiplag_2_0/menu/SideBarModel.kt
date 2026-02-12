@@ -1,4 +1,4 @@
-package com.hfad.common_components.menu
+package com.hfad.antiplag_2_0.menu
 
 data class SideBarModel(
     val title: String,

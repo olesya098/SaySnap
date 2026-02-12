@@ -1,10 +1,12 @@
 package com.hfad.edit.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -37,9 +40,13 @@ import com.hfad.common_components.button.CustomButton
 import com.hfad.common_components.dialog.DialogFolder
 import com.hfad.edit.components.CustomIcon
 import com.hfad.edit.until.wrapSelectedText
+import com.hfad.theme.Black
 import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
 import com.hfad.theme.R
+import com.hfad.theme.White
+import com.hfad.theme.gray
+import com.hfad.theme.gray2
 
 @Composable
 fun FileSelectView(
@@ -54,19 +61,27 @@ fun FileSelectView(
             .fillMaxSize()
             .padding(horizontal = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
+                .padding(top = 8.dp)
                 .clip(shape = RoundedCornerShape(20))
-                .background(LitePurple.copy(alpha = 0.5f)),
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .border(
+                    width = 1.5.dp,
+                    color = gray.copy(alpha = 0.3f),
+                    shape = RoundedCornerShape(15.dp)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier
-                    .padding(vertical = 10.dp),
+                    .padding(vertical = 15.dp),
                 horizontalArrangement = Arrangement.spacedBy(15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -102,7 +117,8 @@ fun FileSelectView(
         }
         Card(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .weight(1f),
             colors = CardDefaults.cardColors(
                 containerColor = PointGray
             ),
@@ -126,7 +142,7 @@ fun FileSelectView(
                         Text(
                             text = "Файл пуст",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = Black
                         )
                     }
                 } else {
@@ -140,7 +156,7 @@ fun FileSelectView(
                             .verticalScroll(rememberScrollState()),
                         textStyle = TextStyle(
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = Black
                         ),
                         decorationBox = { innerTextField ->
                             Box(
@@ -154,13 +170,16 @@ fun FileSelectView(
                 }
             }
         }
+        CustomButton(
+            text = "Сохранить",
+            color = LitePurple
+        ) {
+            showDialog.value = true
+        }
+        Spacer(modifier = Modifier.padding(bottom = 16.dp))
     }
-    CustomButton(
-        text = "Сохранить",
-        color = LitePurple
-    ) {
-        showDialog.value = true
-    }
+
+
     if (showDialog.value) {
         DialogFolder(
             title = "",

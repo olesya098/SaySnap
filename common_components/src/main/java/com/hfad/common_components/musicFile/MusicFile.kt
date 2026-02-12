@@ -22,8 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hfad.common_components.R
 import com.hfad.theme.DarkBlue
 import com.hfad.theme.LitePurple
@@ -38,91 +41,66 @@ fun MusicFile(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(shape = RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .border(
+                width = 1.dp,
+                color = Color(0x33000000),
+                shape = RoundedCornerShape(15.dp),
+            )
+            .padding(16.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-                .clip(shape = RoundedCornerShape(17.dp))
-                .background(LitePurple)
-                .padding(15.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Image(
-                painter = painterResource(id = com.hfad.theme.R.drawable.music),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
-                    .size(40.dp)
-                    .padding(end = 15.dp)
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(5.dp)
+                    .size(48.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color(0xFFE8EAFF)),
+                contentAlignment = Alignment.Center
             ) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(shape = RoundedCornerShape(13.dp))
-                        .background(
-                            White
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-
-                ) {
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.padding(5.dp)
-
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(13.dp))
-                        .background(
-                            White
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-
-                ) {
-                    Text(
-                        text = time,
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = com.hfad.theme.R.drawable.outline_audio_file_24 ),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = Color(0xFF6C63FF)
+                )
             }
 
-
-        }
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 8.dp, end = 8.dp)
-                .clip(shape = CircleShape)
-                .background(White)
-                .size(24.dp)
-                .border(
-                    width = 0.5.dp,
-                    color = DarkBlue,
-                    shape = CircleShape
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = text,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF1A1A1A)
                 )
-                .clickable { onDelete() },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(id = com.hfad.theme.R.drawable.close),
-                contentDescription = null,
+                Text(
+                    text = time,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFF9E9E9E)
+                )
+            }
+
+            Box(
                 modifier = Modifier
-                    .size(8.dp),
-                tint = DarkBlue
-            )
+                    .size(32.dp)
+                    .clickable { onDelete() },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = com.hfad.theme.R.drawable.menu),
+                    contentDescription = "Меню",
+                    modifier = Modifier.size(20.dp),
+                    tint = Color(0xFF9E9E9E)
+                )
+            }
         }
     }
-
 }

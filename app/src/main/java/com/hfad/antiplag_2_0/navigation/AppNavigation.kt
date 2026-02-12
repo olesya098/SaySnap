@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hfad.antiplag_2_0.screens.edit.EditScreen
 import com.hfad.antiplag_2_0.screens.edit.EditViewModel
+import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.antiplag_2_0.screens.home.HomeViewModel
 import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
@@ -26,6 +27,7 @@ fun AppNavigation() {
 
     val editViewModel = viewModel<EditViewModel>()
     val homeViewModel = viewModel<HomeViewModel>()
+    val folderViewModel = viewModel<FolderViewModel>()
 
     CompositionLocalProvider(
         LocalNavigator provides navigator
@@ -35,16 +37,16 @@ fun AppNavigation() {
             startDestination = Routes.ONBOARDINGSCREEN
         ) {
             composable(route = Routes.HOMESCREEN) {
-                HomeScreen(homeViewModel)
+                HomeScreen(homeViewModel, folderViewModel)
             }
             composable(route = Routes.EDITSCREEN) {
-                EditScreen(editViewModel)
+                EditScreen(editViewModel, folderViewModel)
             }
             composable(route = Routes.ONBOARDINGSCREEN) {
                 OnboardingScreen()
             }
             composable(route = Routes.SETTINGSCREEN) {
-                SettingScreen("account") {
+                SettingScreen("account", folderViewModel = folderViewModel) {
 
                 }
             }

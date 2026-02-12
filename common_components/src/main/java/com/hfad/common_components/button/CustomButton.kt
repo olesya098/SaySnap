@@ -2,6 +2,7 @@ package com.hfad.common_components.button
 
 import android.R.attr.text
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hfad.theme.LitePurple
+import com.hfad.theme.White
 import kotlinx.coroutines.FlowPreview
 
 @Composable
@@ -30,7 +32,7 @@ fun CustomButton(
             onClick()
 
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(40.dp),
         colors = ButtonDefaults.buttonColors(
             color
         ),
@@ -38,6 +40,7 @@ fun CustomButton(
     ) {
         Text(
             text = text,
+            color = White,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
 

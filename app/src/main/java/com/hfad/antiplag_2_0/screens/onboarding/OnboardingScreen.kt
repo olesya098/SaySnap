@@ -29,7 +29,7 @@ fun OnboardingScreen() {
             dividerColor = TranscriptionDivider,
             title = "Автоматическая расшифровка аудио",
             description = "Распознайте текст с помощью передовых нейросетей — быстро, точно, даже в шумной обстановке.",
-            image = com.hfad.theme.R.drawable.video_and_audio,
+            image = com.hfad.theme.R.drawable.outline_audio_file_24,
             onNext = { viewModel.nextScreen() },
             currentIndex = currentScreen,
             totalScreens = 4
@@ -40,7 +40,7 @@ fun OnboardingScreen() {
             dividerColor = TranscriptionDivider,
             title = "Умное редактирование",
             description = "Нейросеть сама оформит текст: расставит пунктуацию, абзацы и заголовки",
-            image = com.hfad.theme.R.drawable.edit2,
+            image = com.hfad.theme.R.drawable.lamp,
             onNext = { viewModel.nextScreen() },
             currentIndex = currentScreen,
             totalScreens = 4
@@ -51,7 +51,7 @@ fun OnboardingScreen() {
             dividerColor = SimpleEditDivider,
             title = "Простое редактирование",
             description = "Или отредактируйте вручную — с удобным и интуитивным редактором.",
-            image = com.hfad.theme.R.drawable.edit_document_file_icon,
+            image = com.hfad.theme.R.drawable.notes,
             onNext = { viewModel.nextScreen()},
             currentIndex = currentScreen,
             totalScreens = 4

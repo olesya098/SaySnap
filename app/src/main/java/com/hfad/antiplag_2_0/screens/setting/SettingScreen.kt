@@ -1,15 +1,18 @@
 package com.hfad.antiplag_2_0.screens.setting
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,22 +22,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.hfad.common_components.menu.SideBarMenu
+import com.hfad.antiplag_2_0.menu.SideBarMenu
+import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.scaffold.CustomScaffold
 import com.hfad.theme.LitePurple
 import com.hfad.theme.R
+import com.hfad.theme.gray
+import com.hfad.theme.gray2
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingScreen(
     account: String,
-    onExit: () -> Unit
+    folderViewModel: FolderViewModel,
+    onExit: () -> Unit,
+
 ) {
     val scope = rememberCoroutineScope()
     SideBarMenu(
+        folderViewModel = folderViewModel,
         action = { drawerState ->
             CustomScaffold(
                 title = "Setting",
@@ -44,14 +53,29 @@ fun SettingScreen(
                             scope.launch {
                                 drawerState.open()
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .size(30.dp)
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(15.dp)
+                            )
+                            .border(
+                                width = 1.5.dp,
+                                color = gray2.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(15.dp)
+                            )
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.menu),
-                            contentDescription = null
+                            contentDescription = "Назад",
+                            tint = Color(0xFF1A1A1A),
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
+
             ) {
                 Column(
                     modifier = Modifier
@@ -93,8 +117,8 @@ fun SettingScreen(
 
                     }
                     HorizontalDivider(
-                        Modifier, 2.dp,
-                        LitePurple
+                        Modifier, 1.dp,
+                        gray
                     )
 
                     Row(

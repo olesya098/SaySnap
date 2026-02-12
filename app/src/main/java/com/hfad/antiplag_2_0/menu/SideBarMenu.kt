@@ -1,4 +1,4 @@
-package com.hfad.common_components.menu
+package com.hfad.antiplag_2_0.menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +23,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.dialog.DialogFolder
 import com.hfad.common_components.dialog.DialogNotes
 import com.hfad.common_components.navigation.LocalNavigator
@@ -42,11 +44,13 @@ import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
 import com.hfad.theme.R
 import com.hfad.theme.White
+import com.hfad.theme.gray
 import kotlinx.coroutines.launch
 
 @Composable
 fun SideBarMenu(
     action: @Composable (DrawerState) -> Unit,
+    folderViewModel: FolderViewModel
 ) {
     val scope = rememberCoroutineScope()
     val interactionsSource = remember { MutableInteractionSource() }
@@ -62,6 +66,7 @@ fun SideBarMenu(
 
     val currentRoute = navigator.currentRoute
 
+    val folders = folderViewModel.folder.collectAsState()
     val routes = listOf(
         SideBarModel(
             title = "Главная",
@@ -74,7 +79,7 @@ fun SideBarMenu(
         ),
         SideBarModel(
             title = "Редактировать",
-            imageId = R.drawable.edit2,
+            imageId = R.drawable.edit,
             route = Routes.EDITSCREEN
         ),
         SideBarModel(
@@ -82,36 +87,24 @@ fun SideBarMenu(
             imageId = R.drawable.setting,
             route = Routes.SETTINGSCREEN
         ),
-        SideBarModel(
-            title = "Новая папка",
-            imageId = R.drawable.newfolder,
-            isDialog = true
-        ),
-        SideBarModel(
-            title = "Учёба",
-            imageId = R.drawable.study,
 
-            ),
-        SideBarModel(
-            title = "Работа",
-            imageId = R.drawable.work,
-
-            ),
     )
     if (showFolderDialog.value) {
-//        DialogFolder(
-//            onDismiss = {
-//                showFolderDialog.value = false
-//                scope.launch {
-//                    drawerState.close()
-//                }
-//            },
-//            onNameSave = { folderName ->
-//                showFolderDialog.value = false
-//                showNotesDialog.value = true
-//            }
-//        )
+        DialogFolder(
+            onDismiss = {
+                showFolderDialog.value = false
+                scope.launch {
+                    drawerState.close()
+                }
+            },
+            onNameSave = { folderName ->
+                folderViewModel.addFolder(folderName)
+                showFolderDialog.value = false
+            },
+            title = "Введите название папки"
+        )
     }
+
     if (showNotesDialog.value){
         DialogNotes (
             onDismiss = {
@@ -158,8 +151,8 @@ fun SideBarMenu(
 
 
                     HorizontalDivider(
-                        thickness = 2.dp,
-                        color = LitePurple
+                        thickness = 1.dp,
+                        color = gray
                     )
 
                     for (i in 1 until 4) {
@@ -170,22 +163,28 @@ fun SideBarMenu(
                         }
                     }
                     HorizontalDivider(
-                        Modifier, 2.dp,
-                        LitePurple
+                        Modifier, 1.dp,
+                        gray
                     )
                     Text(
                         text = "Папки",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(start = 12.dp)
                     )
-                    for (i in 4 until routes.size) {
-                        routes[i].Menu(
-                            isSelect = currentRoute == routes[i].route
-                        ) {
-                            if (routes[i].title == "Новая папка") {
-                                showFolderDialog.value = true
-                            } else {
-                            }
+                    SideBarModel(
+                        title = "Новая папка",
+                        imageId = R.drawable.newfolder,
+                        isDialog = true
+                    ).Menu() {
+                        showFolderDialog.value = true
+                    }
+                    folders.value.forEach {
+                        SideBarModel(
+                            title = it,
+                            imageId = R.drawable.newfolder,
+
+                        ).Menu() {
+
                         }
                     }
                 }
