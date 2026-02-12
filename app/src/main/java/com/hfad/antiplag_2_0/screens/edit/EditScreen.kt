@@ -14,10 +14,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.hfad.antiplag_2_0.model.state.EditUIState
+import com.hfad.common_components.button.CustomButton
 import com.hfad.common_components.menu.SideBarMenu
 import com.hfad.common_components.scaffold.CustomScaffold
 import com.hfad.edit.view.FileNotSelectView
 import com.hfad.edit.view.FileSelectView
+import com.hfad.theme.LitePurple
 import com.hfad.theme.R
 import kotlinx.coroutines.launch
 
@@ -52,35 +54,41 @@ fun EditScreen(
                     }
                 }
             ) {
-               when (state.value){
-                   EditUIState.IsFileNotSelected -> {
-                       FileNotSelectView {
-                           fileText = TextFieldValue(
-                               text = it,
-                               selection = TextRange(it.length)
-                           )
-                           editViewModel.updateEditState(EditUIState.IsFileSelected)
-                       }
-                   }
-                   EditUIState.IsFileSelected -> {
-                       FileSelectView(
-                           fileText = fileText,
-                           showDialog = showDialog,
-                           action = {
-                               it.apply { fileText = it }
-                           }
-                       ) {
-                           fileText = it.copy(
-                               annotatedString = AnnotatedString(
-                                   text = it.text,
-                                   spanStyles = fileText.annotatedString.spanStyles,
-                                   paragraphStyles = fileText.annotatedString.paragraphStyles
-                               )
-                           )
-                       }
-                   }
-               }
-           }
+                when (state.value) {
+                    EditUIState.IsFileNotSelected -> {
+                        FileNotSelectView {
+                            fileText = TextFieldValue(
+                                text = it,
+                                selection = TextRange(it.length)
+                            )
+                            editViewModel.updateEditState(EditUIState.IsFileSelected)
+                        }
+                    }
+
+                    EditUIState.IsFileSelected -> {
+                        FileSelectView(
+                            fileText = fileText,
+                            showDialog = showDialog,
+                            action = {
+                                it.apply { fileText = it }
+                            },
+                            onValueChange = {
+                                fileText = it.copy(
+                                    annotatedString = AnnotatedString(
+                                        text = it.text,
+                                        spanStyles = fileText.annotatedString.spanStyles,
+                                        paragraphStyles = fileText.annotatedString.paragraphStyles
+                                    )
+                                )
+                            },
+                            onSaveToFolder = { name, content ->
+                                editViewModel.saveFile(name, content)
+
+                            }
+                        )
+                    }
+                }
+            }
         }
     )
 }

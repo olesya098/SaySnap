@@ -2,9 +2,7 @@ package com.hfad.common_components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -32,8 +29,9 @@ import com.hfad.theme.White
 
 @Composable
 fun DialogFolder(
+    title: String,
     onDismiss: () -> Unit,
-    onSave: (String) -> Unit
+    onNameSave: (String) -> Unit
 
 ) {
     var text by remember { mutableStateOf("") }
@@ -57,7 +55,7 @@ fun DialogFolder(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Введите название папки",
+                    text = title,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 TextField(
@@ -82,7 +80,7 @@ fun DialogFolder(
                     modifier = Modifier,
                     onClick = {
                         if (text.isNotBlank()) {
-                            onSave(text)
+                            onNameSave(text)
                         }
                         onDismiss()
                     }

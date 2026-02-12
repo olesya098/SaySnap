@@ -18,6 +18,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,13 +34,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hfad.common_components.button.CustomButton
-import com.hfad.common_components.dialog.Dialog
+import com.hfad.common_components.dialog.DialogFolder
 import com.hfad.edit.components.CustomIcon
 import com.hfad.edit.until.wrapSelectedText
 import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
 import com.hfad.theme.R
-import kotlinx.coroutines.launch
 
 @Composable
 fun FileSelectView(
@@ -44,6 +47,7 @@ fun FileSelectView(
     showDialog: MutableState<Boolean>,
     action: (TextFieldValue) -> TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    onSaveToFolder: (String, String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -151,21 +155,24 @@ fun FileSelectView(
             }
         }
     }
-//    CustomButton(
-//        text = "Сохранить",
-//        color = LitePurple
-//    ) {
-//        showDialog.value = true
-//    }
-//    if (showDialog.value) {
-//        Dialog(
-//            onDismiss = {
-//                showDialog.value = false
-//
-//            }
-//
-//        )
-//    }
+    CustomButton(
+        text = "Сохранить",
+        color = LitePurple
+    ) {
+        showDialog.value = true
+    }
+    if (showDialog.value) {
+        DialogFolder(
+            title = "",
+            onDismiss = {
+                showDialog.value = false
+            },
+            onNameSave = {
+                onSaveToFolder(it, fileText.text)
+            }
+
+        )
+    }
 
 }
 

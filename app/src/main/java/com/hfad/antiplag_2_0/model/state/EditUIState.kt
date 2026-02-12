@@ -4,3 +4,8 @@ sealed class EditUIState {
     data object IsFileNotSelected : EditUIState()
     data object IsFileSelected : EditUIState()
 }
+class UserRegistration(email: String,password: String){
+    fun registerUser(email: String,password: String){
+
+    }
+}

@@ -99,18 +99,18 @@ fun SideBarMenu(
             ),
     )
     if (showFolderDialog.value) {
-        DialogFolder(
-            onDismiss = {
-                showFolderDialog.value = false
-                scope.launch {
-                    drawerState.close()
-                }
-            },
-            onSave = { folderName ->
-                showFolderDialog.value = false
-                showNotesDialog.value = true
-            }
-        )
+//        DialogFolder(
+//            onDismiss = {
+//                showFolderDialog.value = false
+//                scope.launch {
+//                    drawerState.close()
+//                }
+//            },
+//            onNameSave = { folderName ->
+//                showFolderDialog.value = false
+//                showNotesDialog.value = true
+//            }
+//        )
     }
     if (showNotesDialog.value){
         DialogNotes (
