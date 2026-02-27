@@ -44,8 +44,7 @@ fun HomeCard(
             },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(10.dp),
             textStyle = TextStyle(
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface

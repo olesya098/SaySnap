@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hfad.antiplag_2_0.model.state.HomeUIState
 import com.hfad.domain.model.TranscriptionRequestDTO
+import com.hfad.domain.repository.TextStructureRepository
 import com.hfad.domain.repository.TranscriptionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 import java.io.File
 import javax.inject.Inject
 
@@ -24,12 +26,16 @@ const val token = "f8f2bd6943244370b31bb3487782294f"
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val transcriptionRepository: TranscriptionRepository,
+    private val textStructureRepository: TextStructureRepository
 
 ) : ViewModel() {
 
 
     private val _state = MutableStateFlow(HomeUIState())
     val state = _state.asStateFlow()
+
+    private val _textStructure = MutableStateFlow<String?>(null)
+    val textStructure = _textStructure.asStateFlow()
 
     fun setAudioUri(uri: Uri) {
         _state.value = HomeUIState(audioUri = uri)
@@ -93,6 +99,13 @@ class HomeViewModel @Inject constructor(
 
         }
 
+    }
+
+    fun textStructure(text: String) {
+        viewModelScope.launch {
+            _textStructure.value = textStructureRepository.textStructure(text).text
+
+        }
     }
 }
 

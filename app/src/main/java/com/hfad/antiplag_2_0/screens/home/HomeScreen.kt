@@ -45,6 +45,7 @@ import com.hfad.common_components.homeCard.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.musicFile.MusicFile
+import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.common_components.scaffold.CustomScaffold
 import com.hfad.home.components.UploadFile
@@ -75,7 +76,7 @@ fun HomeScreen(
     )
 
     val scope = rememberCoroutineScope()
-    val navController = rememberNavController()
+    val navigator = LocalNavigator.current
     val context = LocalContext.current
     val state = homeViewModel.state.collectAsState()
 
@@ -159,15 +160,13 @@ fun HomeScreen(
                             modifier = Modifier.padding(horizontal = 15.dp)
                         ) {
                             if (state.value.transcriptionText != null) {
-                                Row(
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     ButtonBorder(
                                         text = "Структурировать текст"
                                     ) {
-                                        navController.navigate(Routes.EDITSCREEN)
-
+                                        navigator.navigate(Routes.EDITSCREEN)
                                     }
                                     CustomButton(
                                         text = "Сохранить",

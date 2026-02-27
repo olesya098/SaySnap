@@ -1,6 +1,7 @@
 package com.hfad.data.di
 
 import com.hfad.data.repositoryImpl.TextStructureRepositoryImpl
+import com.hfad.domain.repository.TextStructureRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +15,5 @@ abstract class TextStructureRepositoryModule {
     @Singleton
     abstract fun bindTextStructureRepository(
         impl: TextStructureRepositoryImpl
-    ): TextStructureRepositoryModule
+    ): TextStructureRepository
 }
