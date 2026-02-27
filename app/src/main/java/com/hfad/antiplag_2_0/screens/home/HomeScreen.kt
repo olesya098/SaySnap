@@ -9,14 +9,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -37,17 +35,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import com.hfad.common_components.button.ButtonBorder
 import com.hfad.common_components.button.CustomButton
-import com.hfad.common_components.dialog.Dialog
-import com.hfad.common_components.homeCard.HomeCard
+import com.hfad.home.components.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.musicFile.MusicFile
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.common_components.scaffold.CustomScaffold
+import com.hfad.home.components.HomeDialog
 import com.hfad.home.components.UploadFile
 import com.hfad.home.config.getAudioDuration
 import com.hfad.home.config.getFileNameFromUri
@@ -55,8 +52,8 @@ import com.hfad.home.config.timeFormat
 import com.hfad.theme.LitePurple
 import com.hfad.theme.R
 import com.hfad.theme.background
-import com.hfad.theme.gray
 import com.hfad.theme.gray2
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,6 +67,7 @@ fun HomeScreen(
         visible = true
     }
 
+
     val alpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
         animationSpec = tween(800)
@@ -81,6 +79,23 @@ fun HomeScreen(
     val state = homeViewModel.state.collectAsState()
 
     val showDialog = remember { mutableStateOf(false) }
+
+    val text = homeViewModel.textStructure.collectAsState()
+
+    LaunchedEffect(showDialog.value) {
+        delay(2000L)
+        if (showDialog.value){
+            homeViewModel.textStructure(state.value.transcriptionText.toString()){
+                if (it){
+                    showDialog.value = false
+                }else{
+                    showDialog.value = true
+                }
+            }
+        }
+    }
+
+
     val audioPickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let {
@@ -88,6 +103,9 @@ fun HomeScreen(
             }
         }
 
+    if (showDialog.value) {
+        HomeDialog()
+    }
 
     SideBarMenu(
         folderViewModel = folderViewModel,
@@ -147,7 +165,7 @@ fun HomeScreen(
                         )
                         if (state.value.transcriptionText != null) {
                             HomeCard(
-                                state.value.transcriptionText.toString()
+                                text.value.toString()
                             )
                         }
                         if (state.value.error != null) {
@@ -172,7 +190,7 @@ fun HomeScreen(
                                         text = "Сохранить",
                                         LitePurple
                                     ) {
-                                        showDialog.value = true
+
                                     }
 
                                 }
@@ -183,7 +201,15 @@ fun HomeScreen(
                                     },
                                     color = LitePurple,
                                     onClick = {
-                                        homeViewModel.transcription(context)
+                                        homeViewModel.transcription(
+                                            context,
+                                        ) {
+                                            if (it) {
+                                                showDialog.value = true
+                                            } else {
+                                                showDialog.value = false
+                                            }
+                                        }
                                     }
                                 )
                             }

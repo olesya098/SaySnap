@@ -41,6 +41,9 @@ dependencies {
     implementation(project(":theme"))
     implementation(project(":common_components"))
 
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil-gif:2.5.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

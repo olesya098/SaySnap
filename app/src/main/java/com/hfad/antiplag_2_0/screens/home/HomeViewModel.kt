@@ -3,6 +3,7 @@ package com.hfad.antiplag_2_0.screens.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.util.Log.i
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,7 +46,10 @@ class HomeViewModel @Inject constructor(
         _state.value = HomeUIState()
     }
 
-    fun transcription(context: Context) {
+    fun transcription(
+        context: Context,
+        onSuccess: (Boolean) -> Unit
+    ) {
         val uri = _state.value.audioUri ?: return
 
         viewModelScope.launch {
@@ -69,10 +73,12 @@ class HomeViewModel @Inject constructor(
                         transcriptionText = result.text
                     )
                 }
+                onSuccess(true)
             } catch (e: Exception) {
                 _state.update {
                     it.copy(isLoading = false, error = e.toString())
                 }
+                onSuccess(false)
             }
         }
     }
@@ -101,9 +107,18 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun textStructure(text: String) {
+    fun textStructure(
+        text: String,
+        onSuccess: (Boolean) -> Unit
+    ) {
         viewModelScope.launch {
-            _textStructure.value = textStructureRepository.textStructure(text).text
+            try {
+                _textStructure.value = textStructureRepository.textStructure(text).text
+                onSuccess(true)
+            } catch (e: Exception) {
+                Log.d("HomeScreenViewModel", "Не удалось структурировать текст")
+                onSuccess(false)
+            }
 
         }
     }
