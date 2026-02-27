@@ -82,14 +82,12 @@ fun HomeScreen(
 
     val text = homeViewModel.textStructure.collectAsState()
 
-    LaunchedEffect(showDialog.value) {
-        delay(2000L)
-        if (showDialog.value){
-            homeViewModel.textStructure(state.value.transcriptionText.toString()){
+    LaunchedEffect(state.value.transcriptionText) {
+        state.value.transcriptionText?.let { text ->
+            showDialog.value = true
+            homeViewModel.textStructure(text){
                 if (it){
                     showDialog.value = false
-                }else{
-                    showDialog.value = true
                 }
             }
         }
@@ -203,13 +201,7 @@ fun HomeScreen(
                                     onClick = {
                                         homeViewModel.transcription(
                                             context,
-                                        ) {
-                                            if (it) {
-                                                showDialog.value = true
-                                            } else {
-                                                showDialog.value = false
-                                            }
-                                        }
+                                        ) {}
                                     }
                                 )
                             }

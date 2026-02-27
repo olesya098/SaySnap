@@ -1,10 +1,12 @@
 package com.hfad.data.data.geminiservice
 
+import android.util.Log
 import com.hfad.core.ClientCore
 import com.hfad.domain.model.GeminiRequestDTO
 import com.hfad.domain.model.GeminiResponseDTO
 import io.ktor.client.call.body
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
@@ -17,7 +19,7 @@ class GeminiService @Inject constructor(
     suspend fun generateContent(
         geminiResponseDTO: GeminiResponseDTO
     ): GeminiRequestDTO {
-        return core.request(
+        val response = core.request(
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"
         ) {
             method = HttpMethod.Post
@@ -28,6 +30,8 @@ class GeminiService @Inject constructor(
                 ContentType.Application.Json
             )
             setBody(geminiResponseDTO)
-        }.body()
+        }
+        Log.d("GeminiService", response.bodyAsText())
+        return response.body()
     }
 }
