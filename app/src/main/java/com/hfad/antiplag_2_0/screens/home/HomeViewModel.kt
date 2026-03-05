@@ -3,8 +3,6 @@ package com.hfad.antiplag_2_0.screens.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
-import android.util.Log.i
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hfad.antiplag_2_0.model.state.HomeUIState
@@ -12,13 +10,11 @@ import com.hfad.domain.model.TranscriptionRequestDTO
 import com.hfad.domain.repository.TextStructureRepository
 import com.hfad.domain.repository.TranscriptionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import java.io.File
 import javax.inject.Inject
 
@@ -35,9 +31,6 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(HomeUIState())
     val state = _state.asStateFlow()
 
-    private val _textStructure = MutableStateFlow<String?>(null)
-    val textStructure = _textStructure.asStateFlow()
-
     fun setAudioUri(uri: Uri) {
         _state.value = HomeUIState(audioUri = uri)
     }
@@ -46,39 +39,37 @@ class HomeViewModel @Inject constructor(
         _state.value = HomeUIState()
     }
 
-    fun transcription(
-        context: Context,
-        onSuccess: (Boolean) -> Unit
-    ) {
+    fun transcribeAndStructure(context: Context) {
+
         val uri = _state.value.audioUri ?: return
 
         viewModelScope.launch {
             try {
-                _state.update {
-                    it.copy(isLoading = true)
-                }
+                _state.update { it.copy(isLoading = true, error = null) }
+
                 val filePath = getFilePath(uri, context)
 
                 val upload = transcriptionRepository.upload(token, filePath)
 
-                val transcript =
-                    transcriptionRepository.transcription(upload.uploadUrl, token = token)
+                val transcript = transcriptionRepository.transcription(upload.uploadUrl, token = token)
 
-                val result =
-                    getTranscription(transcript.id, token)
+                val result = getTranscription(transcript.id, token)
 
+                val structured = textStructureRepository.textStructure(result.text ?: "").text
+
+                delay(1000)
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        transcriptionText = result.text
+                        transcriptionText = result.text,
+                        structuredText = structured
                     )
                 }
-                onSuccess(true)
+
             } catch (e: Exception) {
                 _state.update {
                     it.copy(isLoading = false, error = e.toString())
                 }
-                onSuccess(false)
             }
         }
     }
@@ -102,23 +93,6 @@ class HomeViewModel @Inject constructor(
             val response = transcriptionRepository.getTranscription(id, token)
             if (response.status == "completed") return response
             if (response.status == "error") error("Не удалось получить транскрипцию")
-
-        }
-
-    }
-
-    fun textStructure(
-        text: String,
-        onSuccess: (Boolean) -> Unit
-    ) {
-        viewModelScope.launch {
-            try {
-                _textStructure.value = textStructureRepository.textStructure(text).text
-                onSuccess(true)
-            } catch (e: Exception) {
-                Log.d("HomeScreenViewModel", "Не удалось структурировать текст")
-                onSuccess(false)
-            }
 
         }
     }

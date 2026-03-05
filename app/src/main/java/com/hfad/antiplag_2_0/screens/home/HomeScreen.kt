@@ -35,15 +35,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.hfad.common_components.button.ButtonBorder
-import com.hfad.common_components.button.CustomButton
-import com.hfad.home.components.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
+import com.hfad.common_components.button.ButtonBorder
+import com.hfad.common_components.button.CustomButton
 import com.hfad.common_components.musicFile.MusicFile
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.common_components.scaffold.CustomScaffold
+import com.hfad.home.components.HomeCard
 import com.hfad.home.components.HomeDialog
 import com.hfad.home.components.UploadFile
 import com.hfad.home.config.getAudioDuration
@@ -53,7 +53,6 @@ import com.hfad.theme.LitePurple
 import com.hfad.theme.R
 import com.hfad.theme.background
 import com.hfad.theme.gray2
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -67,7 +66,6 @@ fun HomeScreen(
         visible = true
     }
 
-
     val alpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
         animationSpec = tween(800)
@@ -78,22 +76,6 @@ fun HomeScreen(
     val context = LocalContext.current
     val state = homeViewModel.state.collectAsState()
 
-    val showDialog = remember { mutableStateOf(false) }
-
-    val text = homeViewModel.textStructure.collectAsState()
-
-    LaunchedEffect(state.value.transcriptionText) {
-        state.value.transcriptionText?.let { text ->
-            showDialog.value = true
-            homeViewModel.textStructure(text){
-                if (it){
-                    showDialog.value = false
-                }
-            }
-        }
-    }
-
-
     val audioPickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let {
@@ -101,7 +83,7 @@ fun HomeScreen(
             }
         }
 
-    if (showDialog.value) {
+    if (state.value.isLoading) {
         HomeDialog()
     }
 
@@ -161,9 +143,9 @@ fun HomeScreen(
                                 homeViewModel.clearAudio()
                             }
                         )
-                        if (state.value.transcriptionText != null) {
+                        state.value.structuredText?.let { fileText ->
                             HomeCard(
-                                text.value.toString()
+                                fileText
                             )
                         }
                         if (state.value.error != null) {
@@ -175,7 +157,7 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier.padding(horizontal = 15.dp)
                         ) {
-                            if (state.value.transcriptionText != null) {
+                            if (state.value.structuredText != null) {
                                 Column(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
@@ -199,9 +181,7 @@ fun HomeScreen(
                                     },
                                     color = LitePurple,
                                     onClick = {
-                                        homeViewModel.transcription(
-                                            context,
-                                        ) {}
+                                        homeViewModel.transcribeAndStructure(context)
                                     }
                                 )
                             }
@@ -231,10 +211,7 @@ fun HomeScreen(
                         )
                     }
                 }
-
             }
-
         }
     )
-
 }
