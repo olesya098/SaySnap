@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "219567711346",
+    "project_id": "saysnap-69c09",
+    "storage_bucket": "saysnap-69c09.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219567711346:android:827e5cd2e71ee470074eeb",
+        "android_client_info": {
+          "package_name": "com.hfad.antiplag_2_0"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219567711346-am1rj0gd3a5f347bn5jllhndc69g6vk6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFpSLATzS6AICjhqcf0V4nN2lEXc-q-lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219567711346-am1rj0gd3a5f347bn5jllhndc69g6vk6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

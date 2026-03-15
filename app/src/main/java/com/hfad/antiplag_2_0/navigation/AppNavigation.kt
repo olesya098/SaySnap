@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
 import com.hfad.antiplag_2_0.screens.edit.EditScreen
 import com.hfad.antiplag_2_0.screens.edit.EditViewModel
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
@@ -28,6 +29,7 @@ fun AppNavigation() {
     val editViewModel = viewModel<EditViewModel>()
     val homeViewModel = viewModel<HomeViewModel>()
     val folderViewModel = viewModel<FolderViewModel>()
+    val authViewModel = viewModel<AuthViewModel>()
 
     CompositionLocalProvider(
         LocalNavigator provides navigator
@@ -37,7 +39,7 @@ fun AppNavigation() {
             startDestination = Routes.ONBOARDINGSCREEN
         ) {
             composable(route = Routes.HOMESCREEN) {
-                HomeScreen(homeViewModel, folderViewModel)
+                HomeScreen(homeViewModel, folderViewModel, authViewModel)
             }
             composable(route = Routes.EDITSCREEN) {
                 EditScreen(editViewModel, folderViewModel)

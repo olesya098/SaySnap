@@ -46,9 +46,8 @@ class HomeViewModel @Inject constructor(
         _state.value = HomeUIState()
     }
 
-    fun transcription(
+    fun transcriptAndStructure(
         context: Context,
-        onSuccess: (Boolean) -> Unit
     ) {
         val uri = _state.value.audioUri ?: return
 
@@ -64,21 +63,30 @@ class HomeViewModel @Inject constructor(
                 val transcript =
                     transcriptionRepository.transcription(upload.uploadUrl, token = token)
 
+
                 val result =
                     getTranscription(transcript.id, token)
+                Log.e("transcript", result.text.toString())
+
+                val structured = textStructureRepository.textStructure(result.text ?: "").text
+                Log.e("structured", structured)
+
+                delay(1000)
+
+
 
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        transcriptionText = result.text
+                        transcriptionText = result.text,
+                        structuredText = structured
                     )
                 }
-                onSuccess(true)
             } catch (e: Exception) {
                 _state.update {
                     it.copy(isLoading = false, error = e.toString())
                 }
-                onSuccess(false)
+                Log.e("error", e.message.toString())
             }
         }
     }
@@ -107,20 +115,5 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun textStructure(
-        text: String,
-        onSuccess: (Boolean) -> Unit
-    ) {
-        viewModelScope.launch {
-            try {
-                _textStructure.value = textStructureRepository.textStructure(text).text
-                onSuccess(true)
-            } catch (e: Exception) {
-                Log.d("HomeScreenViewModel", "Не удалось структурировать текст")
-                onSuccess(false)
-            }
-
-        }
-    }
 }
 

@@ -6,6 +6,7 @@ plugins {
     id("kotlinx-serialization")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -47,9 +48,17 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.firebase.auth)
     ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.navigation.compose)
+
+    implementation(platform(libs.firebase.bom))
+  //  implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     implementation(project(":common_components"))
     implementation(project(":theme"))

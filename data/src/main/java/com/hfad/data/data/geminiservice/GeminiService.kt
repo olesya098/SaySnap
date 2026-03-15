@@ -24,7 +24,7 @@ class GeminiService @Inject constructor(
         ) {
             method = HttpMethod.Post
             headers{
-                append("x-goog-api-key","AIzaSyBRZCO55eA63agLv39SM3Le3meUa49rGmU")
+                append("x-goog-api-key","AIzaSyCme6uBYOK3K1BUFgkQ5TDpv7UU6lJFe-k")
             }
             contentType(
                 ContentType.Application.Json
