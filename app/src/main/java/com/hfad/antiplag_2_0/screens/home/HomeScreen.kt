@@ -39,6 +39,8 @@ import com.hfad.common_components.button.ButtonBorder
 import com.hfad.common_components.button.CustomButton
 import com.hfad.home.components.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
+import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
+import com.hfad.antiplag_2_0.screens.auth.GoogleAuthDialog
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.musicFile.MusicFile
 import com.hfad.common_components.navigation.LocalNavigator
@@ -59,10 +61,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel,
-    folderViewModel: FolderViewModel
+    folderViewModel: FolderViewModel,
+    authViewModel: AuthViewModel
 ) {
     var visible by remember { mutableStateOf(false) }
 
+    var authDialog by remember { mutableStateOf(false) }
+
+    val user = authViewModel.authState.collectAsState()
     LaunchedEffect(Unit) {
         visible = true
     }
@@ -85,8 +91,8 @@ fun HomeScreen(
     LaunchedEffect(state.value.transcriptionText) {
         state.value.transcriptionText?.let { text ->
             showDialog.value = true
-            homeViewModel.textStructure(text){
-                if (it){
+            homeViewModel.textStructure(text) {
+                if (it) {
                     showDialog.value = false
                 }
             }
@@ -220,13 +226,17 @@ fun HomeScreen(
                     ) {
                         UploadFile(
                             onClick = {
-                                audioPickerLauncher.launch(
-                                    arrayOf(
-                                        "audio/mpeg",
-                                        "audio/mp4",
-                                        "audio/mp4a-latm"
+                                if (user.value != null) {
+                                    audioPickerLauncher.launch(
+                                        arrayOf(
+                                            "audio/mpeg",
+                                            "audio/mp4",
+                                            "audio/mp4a-latm"
+                                        )
                                     )
-                                )
+                                } else {
+                                    authDialog = true
+                                }
                             }
                         )
                     }
@@ -236,5 +246,11 @@ fun HomeScreen(
 
         }
     )
+
+    if (authDialog) {
+        GoogleAuthDialog(authViewModel) {
+            authDialog = false
+        }
+    }
 
 }

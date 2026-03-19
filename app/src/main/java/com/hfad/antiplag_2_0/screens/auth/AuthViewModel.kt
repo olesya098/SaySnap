@@ -24,10 +24,11 @@ class AuthViewModel(
             SharingStarted.WhileSubscribed(5000),//дергает поток каждые 5 секунд
             authRepository.currentUser
         )
-    fun signInGoogle(token: String?) {
+    fun signInGoogle(clientId: String?, context: Context) {
         Log.d("AUTH", "signInGoogle вызван")
-        if (token == null) return
+        if (clientId == null) return
         viewModelScope.launch {
+            val token = authRepository.getTokenId(clientId, context) ?: return@launch
             authRepository.sigInGoogle(token)
         }
 

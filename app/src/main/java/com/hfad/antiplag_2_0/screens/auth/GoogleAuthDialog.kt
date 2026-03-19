@@ -43,6 +43,7 @@ fun GoogleAuthDialog(
 ) {
     val user = authViewModel.authState.collectAsState()
     val clientId = stringResource(R.string.client_id)
+    val context = LocalContext.current
 
     LaunchedEffect(user.value) {
         if (user.value != null) {
@@ -75,7 +76,7 @@ fun GoogleAuthDialog(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .clickable {
                         Log.d("AUTH", "Google Sign In clicked")
-                        authViewModel.signInGoogle(clientId)
+                        authViewModel.signInGoogle(clientId, context)
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
