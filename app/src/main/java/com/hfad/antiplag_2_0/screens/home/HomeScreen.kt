@@ -39,8 +39,6 @@ import com.hfad.common_components.button.ButtonBorder
 import com.hfad.common_components.button.CustomButton
 import com.hfad.home.components.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
-import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
-import com.hfad.antiplag_2_0.screens.auth.GoogleAuthDialog
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.musicFile.MusicFile
 import com.hfad.common_components.navigation.LocalNavigator
@@ -61,13 +59,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel,
-    folderViewModel: FolderViewModel,
-    authViewModel: AuthViewModel
+    folderViewModel: FolderViewModel
 ) {
     var visible by remember { mutableStateOf(false) }
-    var authDialog by remember { mutableStateOf(false) }
-
-    val user = authViewModel.authState.collectAsState()
 
     LaunchedEffect(Unit) {
         visible = true
@@ -84,7 +78,21 @@ fun HomeScreen(
     val context = LocalContext.current
     val state = homeViewModel.state.collectAsState()
 
+    val showDialog = remember { mutableStateOf(false) }
+
     val text = homeViewModel.textStructure.collectAsState()
+
+    LaunchedEffect(state.value.transcriptionText) {
+        state.value.transcriptionText?.let { text ->
+            showDialog.value = true
+            homeViewModel.textStructure(text){
+                if (it){
+                    showDialog.value = false
+                }
+            }
+        }
+    }
+
 
     val audioPickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
@@ -93,7 +101,7 @@ fun HomeScreen(
             }
         }
 
-    if (state.value.isLoading) {
+    if (showDialog.value) {
         HomeDialog()
     }
 
@@ -153,9 +161,9 @@ fun HomeScreen(
                                 homeViewModel.clearAudio()
                             }
                         )
-                        state.value.structuredText?.let { text ->
+                        if (state.value.transcriptionText != null) {
                             HomeCard(
-                                text
+                                text.value.toString()
                             )
                         }
                         if (state.value.error != null) {
@@ -167,7 +175,7 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier.padding(horizontal = 15.dp)
                         ) {
-                            state.value.structuredText?.let { text ->
+                            if (state.value.transcriptionText != null) {
                                 Column(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
@@ -184,16 +192,16 @@ fun HomeScreen(
                                     }
 
                                 }
-                            } ?: run {
+                            } else {
                                 CustomButton(
                                     text = if (state.value.isLoading) "Распознаю текст" else {
                                         "Распознать текст"
                                     },
                                     color = LitePurple,
                                     onClick = {
-                                        homeViewModel.transcriptAndStructure(
+                                        homeViewModel.transcription(
                                             context,
-                                        )
+                                        ) {}
                                     }
                                 )
                             }
@@ -212,17 +220,13 @@ fun HomeScreen(
                     ) {
                         UploadFile(
                             onClick = {
-                                if (user.value != null) {
-                                    audioPickerLauncher.launch(
-                                        arrayOf(
-                                            "audio/mpeg",
-                                            "audio/mp4",
-                                            "audio/mp4a-latm"
-                                        )
+                                audioPickerLauncher.launch(
+                                    arrayOf(
+                                        "audio/mpeg",
+                                        "audio/mp4",
+                                        "audio/mp4a-latm"
                                     )
-                                } else {
-                                    authDialog = true
-                                }
+                                )
                             }
                         )
                     }
@@ -232,11 +236,5 @@ fun HomeScreen(
 
         }
     )
-
-    if (authDialog){
-        GoogleAuthDialog(authViewModel) {
-            authDialog = false
-        }
-    }
 
 }

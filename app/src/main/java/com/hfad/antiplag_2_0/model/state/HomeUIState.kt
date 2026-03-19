@@ -6,6 +6,5 @@ data class HomeUIState(
     val audioUri: Uri? = null,
     val isLoading: Boolean = false,
     val transcriptionText: String? = null,
-    val structuredText: String? = null,
-    val error: String? = null
-    )
+    val error: String? = null,
+)
