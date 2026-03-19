@@ -1,8 +1,13 @@
 package com.hfad.antiplag_2_0.screens.auth
 
-import androidx.browser.trusted.Token
+import android.content.Context
+import android.util.Log
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseUser
 import com.hfad.antiplag_2_0.network.AuthRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,8 +24,8 @@ class AuthViewModel(
             SharingStarted.WhileSubscribed(5000),//дергает поток каждые 5 секунд
             authRepository.currentUser
         )
-
     fun signInGoogle(token: String?) {
+        Log.d("AUTH", "signInGoogle вызван")
         if (token == null) return
         viewModelScope.launch {
             authRepository.sigInGoogle(token)
