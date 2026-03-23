@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "219567711346-4q1jspmatbt1s9ji4g8f357jmulvsitl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hfad.antiplag_2_0",
+            "certificate_hash": "29ae103672a7b0c864c6f4b93b8512a27b426f73"
+          }
+        },
+        {
           "client_id": "219567711346-am1rj0gd3a5f347bn5jllhndc69g6vk6.apps.googleusercontent.com",
           "client_type": 3
         }

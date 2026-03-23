@@ -1,5 +1,6 @@
 package com.hfad.antiplag_2_0.screens.auth
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.credentials.CredentialManager
@@ -24,11 +25,11 @@ class AuthViewModel(
             SharingStarted.WhileSubscribed(5000),//дергает поток каждые 5 секунд
             authRepository.currentUser
         )
-    fun signInGoogle(clientId: String?, context: Context) {
+    fun signInGoogle(clientId: String?, activity: Activity) {
         Log.d("AUTH", "signInGoogle вызван")
         if (clientId == null) return
         viewModelScope.launch {
-            val token = authRepository.getTokenId(clientId, context) ?: return@launch
+            val token = authRepository.getTokenId(clientId, activity) ?: return@launch
             authRepository.sigInGoogle(token)
         }
 
