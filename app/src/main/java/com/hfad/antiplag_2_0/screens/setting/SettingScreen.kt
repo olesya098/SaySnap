@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -19,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.scaffold.CustomScaffold
-import com.hfad.theme.LitePurple
 import com.hfad.theme.R
 import com.hfad.theme.gray
 import com.hfad.theme.gray2
@@ -36,12 +35,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingScreen(
-    account: String,
+    settingViewModel: SettingViewModel,
     folderViewModel: FolderViewModel,
     onExit: () -> Unit,
-
 ) {
     val scope = rememberCoroutineScope()
+    val user = settingViewModel.user.collectAsState()
+    val name = user.value?.displayName ?: user.value?.email ?: "account"
     SideBarMenu(
         folderViewModel = folderViewModel,
         action = { drawerState ->
@@ -100,7 +100,7 @@ fun SettingScreen(
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
-                            text = account,
+                            text = name,
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier
                                 .weight(1f)

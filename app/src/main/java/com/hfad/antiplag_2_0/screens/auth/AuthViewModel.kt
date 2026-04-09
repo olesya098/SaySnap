@@ -34,8 +34,4 @@ class AuthViewModel(
         }
 
     }
-
-    fun signOut() {
-        authRepository.signOut()
-    }
 }

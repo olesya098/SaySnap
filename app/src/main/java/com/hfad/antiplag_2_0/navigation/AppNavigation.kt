@@ -15,6 +15,7 @@ import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.antiplag_2_0.screens.home.HomeViewModel
 import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
 import com.hfad.antiplag_2_0.screens.setting.SettingScreen
+import com.hfad.antiplag_2_0.screens.setting.SettingViewModel
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Navigator
 import com.hfad.common_components.navigation.Routes
@@ -30,6 +31,7 @@ fun AppNavigation() {
     val homeViewModel = viewModel<HomeViewModel>()
     val folderViewModel = viewModel<FolderViewModel>()
     val authViewModel = viewModel<AuthViewModel>()
+    val settingViewModel = viewModel<SettingViewModel>()
 
     CompositionLocalProvider(
         LocalNavigator provides navigator
@@ -48,7 +50,10 @@ fun AppNavigation() {
                 OnboardingScreen()
             }
             composable(route = Routes.SETTINGSCREEN) {
-                SettingScreen("account", folderViewModel = folderViewModel) {
+                SettingScreen(
+                    settingViewModel = settingViewModel, folderViewModel = folderViewModel
+                ) {
+                    settingViewModel.signOut()
 
                 }
             }
