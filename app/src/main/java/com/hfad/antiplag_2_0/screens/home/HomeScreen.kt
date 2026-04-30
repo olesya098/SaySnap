@@ -86,18 +86,18 @@ fun HomeScreen(
 
     val showDialog = remember { mutableStateOf(false) }
 
-    val text = homeViewModel.textStructure.collectAsState()
+//    val text = homeViewModel.textStructure.collectAsState()
 
-    LaunchedEffect(state.value.transcriptionText) {
-        state.value.transcriptionText?.let { text ->
-            showDialog.value = true
-            homeViewModel.textStructure(text) {
-                if (it) {
-                    showDialog.value = false
-                }
-            }
-        }
-    }
+//    LaunchedEffect(state.value.transcriptionText) {
+//        state.value.transcriptionText?.let { text ->
+//            showDialog.value = true
+//            homeViewModel.textStructure(text) {
+//                if (it) {
+//                    showDialog.value = false
+//                }
+//            }
+//        }
+//    }
 
 
     val audioPickerLauncher =
@@ -169,7 +169,7 @@ fun HomeScreen(
                         )
                         if (state.value.transcriptionText != null) {
                             HomeCard(
-                                text.value.toString()
+                                state.value.transcriptionText.toString()
                             )
                         }
                         if (state.value.error != null) {

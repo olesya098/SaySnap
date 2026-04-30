@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
 import com.hfad.antiplag_2_0.screens.edit.EditScreen
 import com.hfad.antiplag_2_0.screens.edit.EditViewModel
+import com.hfad.antiplag_2_0.screens.folders.FolderScreen
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.antiplag_2_0.screens.home.HomeViewModel
@@ -56,6 +57,9 @@ fun AppNavigation() {
                     settingViewModel.signOut()
 
                 }
+            }
+            composable(route = Routes.FOLDERSCREEN) {
+                FolderScreen(folderViewModel)
             }
 
         }
