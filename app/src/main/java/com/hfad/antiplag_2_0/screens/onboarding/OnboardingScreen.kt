@@ -4,6 +4,7 @@ import android.R.attr.description
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hfad.antiplag_2_0.R
 import com.hfad.common_components.navigation.LocalNavigator
@@ -20,7 +21,7 @@ import com.hfad.theme.TranscriptionScreen
 @Composable
 fun OnboardingScreen() {
 
-    val viewModel: OnboardingViewModel = viewModel()
+    val viewModel: OnboardingViewModel = hiltViewModel()
     val currentScreen by viewModel.currentScreen.collectAsState()
     val naigator = LocalNavigator.current
     when (currentScreen) {
@@ -63,7 +64,10 @@ fun OnboardingScreen() {
             title = "Удобное сохранение",
             description = "Приложение даёт возможность сохранить проект как на телефоне, так и в приложении",
             image = com.hfad.theme.R.drawable.save,
-            onNext = {naigator.navigate(Routes.HOMESCREEN) },
+            onNext = {
+                viewModel.completeOnboarding()
+                naigator.navigate(Routes.HOMESCREEN)
+                     },
             currentIndex = currentScreen,
             totalScreens = 4
         )

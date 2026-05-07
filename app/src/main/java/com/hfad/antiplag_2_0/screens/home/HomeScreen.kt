@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.hfad.common_components.button.ButtonBorder
 import com.hfad.common_components.button.CustomButton
 import com.hfad.home.components.HomeCard
@@ -42,6 +43,7 @@ import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
 import com.hfad.antiplag_2_0.screens.auth.GoogleAuthDialog
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
+import com.hfad.common_components.dialog.DialogSave
 import com.hfad.common_components.musicFile.MusicFile
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
@@ -85,6 +87,9 @@ fun HomeScreen(
     val state = homeViewModel.state.collectAsState()
 
     val showDialog = remember { mutableStateOf(false) }
+
+    val folders by folderViewModel.folders.collectAsState()
+    val showSaveDialog = remember { mutableStateOf(false) }
 
 //    val text = homeViewModel.textStructure.collectAsState()
 
@@ -194,7 +199,7 @@ fun HomeScreen(
                                         text = "Сохранить",
                                         LitePurple
                                     ) {
-
+                                        showSaveDialog.value = true
                                     }
 
                                 }
@@ -251,6 +256,20 @@ fun HomeScreen(
         GoogleAuthDialog(authViewModel) {
             authDialog = false
         }
+    }
+
+    if (showSaveDialog.value){
+        DialogSave(
+            onDismiss = {showSaveDialog.value = false},
+            folders = folders,
+            onFolderSelected = { folder ->
+                folderViewModel.selectFolder(folder.id)
+                folderViewModel.saveFileTranscription(
+                    title = getFileNameFromUri(context, state.value.audioUri!!) ?: "Без названия",
+                    text = state.value.transcriptionText ?: ""
+                )
+            }
+        )
     }
 
 }

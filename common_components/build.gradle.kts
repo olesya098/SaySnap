@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     implementation(project(":theme"))
+    implementation(project(":domain"))
 
     implementation(libs.androidx.compose.material3)
 

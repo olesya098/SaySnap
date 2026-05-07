@@ -9,8 +9,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.io.File
+import javax.inject.Inject
 
-class FireStoreRepository {
+class FireStoreRepository @Inject constructor() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
     private val userId = auth.currentUser?.uid ?: error("Пользователь не авторизован")
@@ -25,7 +27,7 @@ class FireStoreRepository {
         folder.copy(id = ref.id)
     }
 
-    suspend fun getFolders(): Flow<List<FolderDTO?>> =
+    fun getFolders(): Flow<List<FolderDTO>> =
         callbackFlow { //получает поток значений фолдеров
             val listener = folderRef()
                 .addSnapshotListener { snapshots, exception ->
@@ -34,7 +36,7 @@ class FireStoreRepository {
                         return@addSnapshotListener
                     }
                     val folders = snapshots?.documents?.map {
-                        it.toObject(FolderDTO::class.java)?.copy(id = it.id)
+                        it.toObject(FolderDTO::class.java)!!.copy(id = it.id)
                     } ?: emptyList()
                     trySend(folders)
                 }
@@ -70,4 +72,25 @@ class FireStoreRepository {
     suspend fun deleteFileTranscription(fileId: String): Result<Unit> = runCatching {
         fileRef().document(fileId).delete().await()
     }
+
+    fun getTranscriptionByFolder(folderId: String?): Flow<List<FileTranscriptionDTO>> =
+        callbackFlow {
+            val query = if (folderId != null) fileRef().whereEqualTo("folderId", folderId)
+            else fileRef().whereEqualTo("folderId", null)
+            val listener = query.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val list = snapshot?.documents?.map {
+                    it.toObject(FileTranscriptionDTO::class.java)!!.copy(
+                        id = it.id
+                    )
+                } ?: emptyList()
+                trySend(list)
+            }
+            awaitClose {
+                listener.remove()
+            }
+        }
 }

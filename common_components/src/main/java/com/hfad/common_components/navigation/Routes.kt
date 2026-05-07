@@ -6,4 +6,5 @@ object Routes {
     const val ONBOARDINGSCREEN = "onboarding_screen"
     const val SETTINGSCREEN = "setting_screen"
     const val FOLDERSCREEN = "folder_screen"
+    const val SPLASHSCREEN = "splash_screen"
 }

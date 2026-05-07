@@ -8,6 +8,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,11 +27,16 @@ fun FolderScreen(
     folderViewModel: FolderViewModel,
 ) {
     val scope = rememberCoroutineScope()
+    val folder by folderViewModel.folders.collectAsState()
+    val selectedFolder by folderViewModel.selectedFolderId.collectAsState()
+
+    val screenTitle = folder.find { it.id == selectedFolder }?.nameFolder ?: "Home"
+
     SideBarMenu(
         folderViewModel = folderViewModel,
         action = { drawerState ->
             CustomScaffold(
-                title = "Home",
+                title = screenTitle,
                 navigationIcon = {
                     IconButton(
                         onClick = {

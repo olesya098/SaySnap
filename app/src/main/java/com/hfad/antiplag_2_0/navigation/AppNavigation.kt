@@ -17,6 +17,7 @@ import com.hfad.antiplag_2_0.screens.home.HomeViewModel
 import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
 import com.hfad.antiplag_2_0.screens.setting.SettingScreen
 import com.hfad.antiplag_2_0.screens.setting.SettingViewModel
+import com.hfad.antiplag_2_0.screens.splash.SplashScreen
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Navigator
 import com.hfad.common_components.navigation.Routes
@@ -39,7 +40,7 @@ fun AppNavigation() {
     ) {
         NavHost(
             navController,
-            startDestination = Routes.ONBOARDINGSCREEN
+            startDestination = Routes.SPLASHSCREEN
         ) {
             composable(route = Routes.HOMESCREEN) {
                 HomeScreen(homeViewModel, folderViewModel, authViewModel)
@@ -60,6 +61,12 @@ fun AppNavigation() {
             }
             composable(route = Routes.FOLDERSCREEN) {
                 FolderScreen(folderViewModel)
+            }
+            composable (route = Routes.SPLASHSCREEN){
+                SplashScreen(){
+                    navigator.navigate(Routes.ONBOARDINGSCREEN)
+
+                }
             }
 
         }

@@ -66,7 +66,7 @@ fun SideBarMenu(
 
     val currentRoute = navigator.currentRoute
 
-    val folders = folderViewModel.folder.collectAsState()
+    val folders = folderViewModel.folders.collectAsState()
     val routes = listOf(
         SideBarModel(
             title = "Главная",
@@ -98,7 +98,7 @@ fun SideBarMenu(
                 }
             },
             onNameSave = { folderName ->
-                folderViewModel.addFolder(folderName)
+                folderViewModel.createFolder(folderName)
                 showFolderDialog.value = false
             },
             title = "Введите название папки"
@@ -180,11 +180,13 @@ fun SideBarMenu(
                     }
                     folders.value.forEach {
                         SideBarModel(
-                            title = it,
+                            title = it.nameFolder,
                             imageId = R.drawable.newfolder,
 
                         ).Menu() {
-
+                            folderViewModel.selectFolder(it.id)
+                            scope.launch { drawerState.close() }
+                            navigator.navigate(Routes.FOLDERSCREEN)
                         }
                     }
                 }
