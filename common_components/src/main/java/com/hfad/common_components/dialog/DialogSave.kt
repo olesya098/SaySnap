@@ -40,19 +40,20 @@ import com.hfad.domain.model.FolderDTO
 import com.hfad.theme.LiteGray
 import com.hfad.theme.LitePurple
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogSave(
     onDismiss: () -> Unit,
     folders: List<FolderDTO>,
-    onFolderSelected: (FolderDTO) -> Unit
+    onFolderSelected: (FolderDTO) -> Unit,
+    onSaveClick: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
     ) {
 
         Surface(
@@ -88,8 +89,11 @@ fun DialogSave(
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomButton(
                     text = "Сохранить в папку",
-                    color = LitePurple,
-                    onClick = {},
+                    color = blueBright,
+                    onClick = {
+                        onSaveClick(text)
+                        onDismiss()
+                    },
                     modifier = Modifier
                 )
 
@@ -114,7 +118,9 @@ fun DialogSave(
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(12.dp))
                                     .background(LiteGray.copy(alpha = 0.2f))
-                                    .clickable { onFolderSelected(folder) }
+                                    .clickable {
+                                        onFolderSelected(folder)
+                                    }
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -122,7 +128,7 @@ fun DialogSave(
                                 Icon(
                                     painter = painterResource(id = com.hfad.theme.R.drawable.file2),
                                     contentDescription = null,
-                                    tint = LitePurple,
+                                    tint = blueBright,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Text(

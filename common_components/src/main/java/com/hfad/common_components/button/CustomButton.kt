@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hfad.theme.LitePurple
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 import kotlinx.coroutines.FlowPreview
 
 @Composable
@@ -55,7 +56,7 @@ fun CustomButton(
 fun PreviewCustomButton() {
     CustomButton(
         "Сохранить",
-        LitePurple,
+        blueBright,
         modifier = Modifier,
         onClick = {}
 

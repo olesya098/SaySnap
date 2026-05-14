@@ -2,11 +2,11 @@ package com.hfad.antiplag_2_0.screens.folders
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.hfad.antiplag_2_0.network.FireStoreRepository
-import com.hfad.data.folders.FolderRepository
 import com.hfad.domain.model.FileTranscriptionDTO
 import com.hfad.domain.model.FolderDTO
-import com.hfad.domain.model.TranscriptionRequestDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +30,9 @@ class FolderViewModel @Inject constructor(private val repository: FireStoreRepos
         )
     private val _selectedFolderId = MutableStateFlow<String?>(null)
     val selectedFolderId = _selectedFolderId.asStateFlow()
+
+    private val _selectedFileId = MutableStateFlow<String?>(null)
+    val selectedFileId = _selectedFileId.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val transcriptions: StateFlow<List<FileTranscriptionDTO>> = _selectedFolderId
@@ -60,6 +63,13 @@ class FolderViewModel @Inject constructor(private val repository: FireStoreRepos
 
     fun deleteFileTranscription(fileId: String) = viewModelScope.launch {
         repository.deleteFileTranscription(fileId)
+    }
+
+    fun updateFileTranscription(fileId: String, title: String, text: String) = viewModelScope.launch {
+        repository.updateFileTranscription(fileId, title, text)
+    }
+    fun updateFileId(fileId: String) = viewModelScope.launch {
+        _selectedFileId.value = fileId
     }
 
 }

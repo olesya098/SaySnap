@@ -26,6 +26,7 @@ import com.hfad.common_components.button.CustomButton
 import com.hfad.theme.LiteGray
 import com.hfad.theme.LitePurple
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 
 @Composable
 fun DialogFolder(
@@ -76,7 +77,7 @@ fun DialogFolder(
                 )
                 CustomButton(
                     text = "Сохранить",
-                    color = LitePurple,
+                    color = blueBright,
                     modifier = Modifier,
                     onClick = {
                         if (text.isNotBlank()) {

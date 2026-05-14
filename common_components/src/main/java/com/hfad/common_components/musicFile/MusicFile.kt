@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,76 +36,84 @@ import com.hfad.common_components.R
 import com.hfad.theme.DarkBlue
 import com.hfad.theme.LitePurple
 import com.hfad.theme.White
+import com.hfad.theme.cyan
+import com.hfad.theme.cyanCopy
+import com.hfad.theme.purple
 
 @Composable
 fun MusicFile(
     text: String,
     time: String,
     onDelete: () -> Unit,
+    onLongClick: (() -> Unit)? = null
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(shape = RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = cyan.copy(alpha = 0.3f),
+                spotColor = purple.copy(alpha = 0.2f)
+            )
+            .background(
+                color = White,
+                shape = RoundedCornerShape(16.dp)
+            )
             .border(
                 width = 1.dp,
-                color = Color(0x33000000),
-                shape = RoundedCornerShape(15.dp),
+                color = cyanCopy,
+                shape = RoundedCornerShape(16.dp)
             )
-            .padding(16.dp)
+            .combinedClickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = Color.Cyan.copy(alpha = 0.4f)),
+                onClick = { },
+                onLongClick = onLongClick
+            )
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(44.dp)
+                .background(
+                    color = cyan.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = cyan.copy(alpha = 0.4f),
+                    shape = RoundedCornerShape(12.dp)
+                )
         ) {
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(shape = RoundedCornerShape(12.dp))
-                    .background(Color(0xFFE8EAFF)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = com.hfad.theme.R.drawable.outline_audio_file_24 ),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = Color(0xFF6C63FF)
-                )
-            }
+            Icon(
+                painter = painterResource(id = com.hfad.theme.R.drawable.outline_audio_file_24),
+                contentDescription = null,
+                tint = cyan,
+                modifier = Modifier.size(22.dp)
+            )
+        }
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = text,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF1A1A1A)
-                )
-                Text(
-                    text = time,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color(0xFF9E9E9E)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clickable { onDelete() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = com.hfad.theme.R.drawable.menu),
-                    contentDescription = "Меню",
-                    modifier = Modifier.size(20.dp),
-                    tint = Color(0xFF9E9E9E)
-                )
-            }
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = text,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF1A1A1A),
+                maxLines = 1
+            )
+            Text(
+                text = time,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color(0xFF9E9E9E)
+            )
         }
     }
 }

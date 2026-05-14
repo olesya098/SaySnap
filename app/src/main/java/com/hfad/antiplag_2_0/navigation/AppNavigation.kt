@@ -15,6 +15,7 @@ import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.antiplag_2_0.screens.home.HomeScreen
 import com.hfad.antiplag_2_0.screens.home.HomeViewModel
 import com.hfad.antiplag_2_0.screens.onboarding.OnboardingScreen
+import com.hfad.antiplag_2_0.screens.onboarding.OnboardingViewModel
 import com.hfad.antiplag_2_0.screens.setting.SettingScreen
 import com.hfad.antiplag_2_0.screens.setting.SettingViewModel
 import com.hfad.antiplag_2_0.screens.splash.SplashScreen
@@ -34,6 +35,7 @@ fun AppNavigation() {
     val folderViewModel = viewModel<FolderViewModel>()
     val authViewModel = viewModel<AuthViewModel>()
     val settingViewModel = viewModel<SettingViewModel>()
+    val onboardingViewModel = viewModel<OnboardingViewModel>()
 
     CompositionLocalProvider(
         LocalNavigator provides navigator
@@ -43,13 +45,13 @@ fun AppNavigation() {
             startDestination = Routes.SPLASHSCREEN
         ) {
             composable(route = Routes.HOMESCREEN) {
-                HomeScreen(homeViewModel, folderViewModel, authViewModel)
+                HomeScreen(homeViewModel, folderViewModel, authViewModel, editViewModel)
             }
             composable(route = Routes.EDITSCREEN) {
                 EditScreen(editViewModel, folderViewModel)
             }
             composable(route = Routes.ONBOARDINGSCREEN) {
-                OnboardingScreen()
+                OnboardingScreen(onboardingViewModel)
             }
             composable(route = Routes.SETTINGSCREEN) {
                 SettingScreen(
@@ -60,12 +62,15 @@ fun AppNavigation() {
                 }
             }
             composable(route = Routes.FOLDERSCREEN) {
-                FolderScreen(folderViewModel)
+                FolderScreen(folderViewModel, editViewModel)
             }
             composable (route = Routes.SPLASHSCREEN){
                 SplashScreen(){
-                    navigator.navigate(Routes.ONBOARDINGSCREEN)
-
+                    if (onboardingViewModel.isOnboardingCompleted()) {
+                        navigator.navigate(Routes.HOMESCREEN)
+                    }else{
+                        navigator.navigate(Routes.ONBOARDINGSCREEN)
+                    }
                 }
             }
 

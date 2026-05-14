@@ -8,14 +8,17 @@ import com.hfad.domain.model.FolderDTO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import javax.inject.Inject
+import kotlin.collections.emptyList
 
 class FireStoreRepository @Inject constructor() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
-    private val userId = auth.currentUser?.uid ?: error("Пользователь не авторизован")
+    private val userId: String
+    get() = auth.currentUser?.uid ?: error("Пользователь не авторизован")
 
     private fun folderRef() = db.collection("users").document(userId).collection("folders")
 
@@ -24,6 +27,7 @@ class FireStoreRepository @Inject constructor() {
     suspend fun createFolder(name: String): Result<FolderDTO> = runCatching {
         val folder = FolderDTO(nameFolder = name)
         val ref = folderRef().add(folder).await()
+        ref.update("id", ref.id).await()
         folder.copy(id = ref.id)
     }
 
@@ -66,6 +70,7 @@ class FireStoreRepository @Inject constructor() {
             folderId = folderId
         )
         val ref = fileRef().add(file).await()
+        ref.update("id", ref.id).await()
         file.copy(id = ref.id)
     }
 
@@ -93,4 +98,10 @@ class FireStoreRepository @Inject constructor() {
                 listener.remove()
             }
         }
+
+    suspend fun updateFileTranscription(fileId: String, title: String, text: String): Result<Unit> = runCatching {
+        fileRef().document(fileId).update(
+            mapOf("text" to text, "title" to title)
+        ).await()
+    }
 }

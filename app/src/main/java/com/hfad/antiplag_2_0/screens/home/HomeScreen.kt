@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hfad.common_components.button.ButtonBorder
@@ -42,6 +45,7 @@ import com.hfad.home.components.HomeCard
 import com.hfad.antiplag_2_0.menu.SideBarMenu
 import com.hfad.antiplag_2_0.screens.auth.AuthViewModel
 import com.hfad.antiplag_2_0.screens.auth.GoogleAuthDialog
+import com.hfad.antiplag_2_0.screens.edit.EditViewModel
 import com.hfad.antiplag_2_0.screens.folders.FolderViewModel
 import com.hfad.common_components.dialog.DialogSave
 import com.hfad.common_components.musicFile.MusicFile
@@ -56,6 +60,8 @@ import com.hfad.home.config.timeFormat
 import com.hfad.theme.LitePurple
 import com.hfad.theme.R
 import com.hfad.theme.background
+import com.hfad.theme.blueBright
+import com.hfad.theme.cyan
 import com.hfad.theme.gray2
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +70,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     folderViewModel: FolderViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    editViewModel: EditViewModel
 ) {
     var visible by remember { mutableStateOf(false) }
 
@@ -115,6 +122,7 @@ fun HomeScreen(
     if (showDialog.value) {
         HomeDialog()
     }
+    var showDeleteAudioDialog by remember { mutableStateOf(false) }
 
     SideBarMenu(
         folderViewModel = folderViewModel,
@@ -150,12 +158,11 @@ fun HomeScreen(
                     }
                 }
             ) {
-
-
                 state.value.audioUri?.let {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(horizontal = 10.dp)
                             .background(background)
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -163,14 +170,10 @@ fun HomeScreen(
                     ) {
                         val duration = getAudioDuration(context, it)
                         MusicFile(
-                            text = getFileNameFromUri(
-                                context,
-                                it
-                            ).toString(),
+                            text = getFileNameFromUri(context, it).toString(),
                             time = timeFormat(duration ?: 0),
-                            onDelete = {
-                                homeViewModel.clearAudio()
-                            }
+                            onDelete = { homeViewModel.clearAudio() },
+                            onLongClick = { showDeleteAudioDialog = true }
                         )
                         if (state.value.transcriptionText != null) {
                             HomeCard(
@@ -193,11 +196,14 @@ fun HomeScreen(
                                     ButtonBorder(
                                         text = "Структурировать текст"
                                     ) {
-                                        navigator.navigate(Routes.EDITSCREEN)
+                                        state.value.transcriptionText?.let {
+                                            editViewModel.updateFileText(fileText = TextFieldValue(it))
+                                            navigator.navigate(Routes.EDITSCREEN)
+                                        }
                                     }
                                     CustomButton(
                                         text = "Сохранить",
-                                        LitePurple
+                                        blueBright
                                     ) {
                                         showSaveDialog.value = true
                                     }
@@ -208,7 +214,7 @@ fun HomeScreen(
                                     text = if (state.value.isLoading) "Распознаю текст" else {
                                         "Распознать текст"
                                     },
-                                    color = LitePurple,
+                                    color = blueBright,
                                     onClick = {
                                         homeViewModel.transcription(
                                             context,
@@ -264,10 +270,35 @@ fun HomeScreen(
             folders = folders,
             onFolderSelected = { folder ->
                 folderViewModel.selectFolder(folder.id)
-                folderViewModel.saveFileTranscription(
-                    title = getFileNameFromUri(context, state.value.audioUri!!) ?: "Без названия",
-                    text = state.value.transcriptionText ?: ""
-                )
+            },
+            onSaveClick = {
+                folderViewModel.saveFileTranscription(it, state.value.transcriptionText ?: "")
+            }
+        )
+    }
+    if (showDeleteAudioDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteAudioDialog = false },
+            shape = RoundedCornerShape(16.dp),
+            containerColor = Color.White,
+            titleContentColor = Color(0xFF1A1A1A),
+            textContentColor = Color(0xFF666666),
+            title = { Text("Удалить аудио?") },
+            text = { Text("Удалённый файл нельзя будет восстановить. Также будет удалена расшифровка.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        homeViewModel.clearAudio()
+                        showDeleteAudioDialog = false
+                    }
+                ) {
+                    Text("Удалить", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteAudioDialog = false }) {
+                    Text("Отмена", color = cyan)
+                }
             }
         )
     }

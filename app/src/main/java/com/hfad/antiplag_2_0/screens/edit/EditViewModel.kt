@@ -1,5 +1,6 @@
 package com.hfad.antiplag_2_0.screens.edit
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hfad.antiplag_2_0.model.state.EditUIState
@@ -18,22 +19,20 @@ class EditViewModel @Inject constructor(
     private val _editState = MutableStateFlow<EditUIState>(EditUIState.IsFileNotSelected)
     val editState = _editState.asStateFlow()
 
+    private val _fileText = MutableStateFlow(TextFieldValue(""))
+    val fileText = _fileText.asStateFlow()
     fun updateEditState(editUIState: EditUIState) {
         viewModelScope.launch {
             _editState.value = editUIState
         }
     }
-
-    fun saveFile(name: String, content: String) {
-//        val fileEntity = FileEntity(name = name, content = content)
-//        viewModelScope.launch {
-//            fileDao.saveFile(fileEntity)
-//        }
-    }
-
     fun editFile(fileEntity: FileEntity) {
         viewModelScope.launch {
             fileDao.updateFile(fileEntity)
         }
+    }
+
+    fun updateFileText(fileText: TextFieldValue){
+        _fileText.value = fileText
     }
 }

@@ -45,6 +45,7 @@ import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
 import com.hfad.theme.R
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 import com.hfad.theme.gray
 import com.hfad.theme.gray2
 
@@ -172,7 +173,7 @@ fun FileSelectView(
         }
         CustomButton(
             text = "Сохранить",
-            color = LitePurple
+            color = blueBright
         ) {
             showDialog.value = true
         }

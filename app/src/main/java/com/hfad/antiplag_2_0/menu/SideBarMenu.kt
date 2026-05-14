@@ -39,11 +39,10 @@ import com.hfad.common_components.dialog.DialogNotes
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.theme.Black
-import com.hfad.theme.LiteBlue
-import com.hfad.theme.LitePurple
 import com.hfad.theme.PointGray
 import com.hfad.theme.R
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 import com.hfad.theme.gray
 import kotlinx.coroutines.launch
 
@@ -200,7 +199,7 @@ fun SideBarMenu(
 
 @Composable
 private fun SideBarModel.Menu(
-    tint: Color = LiteBlue,
+    tint: Color = blueBright,
     isSelect: Boolean = false,
     onNavigate: () -> Unit
 ) {
@@ -223,7 +222,7 @@ private fun SideBarModel.Menu(
                     modifier = Modifier
                         .width(4.dp)
                         .fillMaxHeight()
-                        .background(LitePurple)
+                        .background(blueBright)
                 )
             } else {
                 Spacer(modifier = Modifier.width(4.dp))

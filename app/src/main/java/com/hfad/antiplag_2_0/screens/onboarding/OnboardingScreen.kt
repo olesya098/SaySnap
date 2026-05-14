@@ -1,33 +1,28 @@
 package com.hfad.antiplag_2_0.screens.onboarding
 
-import android.R.attr.description
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.hfad.antiplag_2_0.R
 import com.hfad.common_components.navigation.LocalNavigator
 import com.hfad.common_components.navigation.Routes
 import com.hfad.common_components.onboarding.SplashComponents
-import com.hfad.theme.EditScreen
-import com.hfad.theme.SaveDivider
-import com.hfad.theme.SaveScreen
-import com.hfad.theme.SimpleEditDivider
-import com.hfad.theme.SimpleEditScreen
-import com.hfad.theme.TranscriptionDivider
-import com.hfad.theme.TranscriptionScreen
+import com.hfad.theme.blueBright
+import com.hfad.theme.blueCard
+import com.hfad.theme.cyan
+import com.hfad.theme.deepBlue
+import com.hfad.theme.purple
+import com.hfad.theme.purpleBright
 
 @Composable
-fun OnboardingScreen() {
-
-    val viewModel: OnboardingViewModel = hiltViewModel()
+fun OnboardingScreen(
+    viewModel: OnboardingViewModel
+) {
     val currentScreen by viewModel.currentScreen.collectAsState()
     val naigator = LocalNavigator.current
     when (currentScreen) {
         0 -> SplashComponents(
-            background = TranscriptionScreen,
-            dividerColor = TranscriptionDivider,
+            background = deepBlue,
+            dividerColor = cyan,
             title = "Автоматическая расшифровка аудио",
             description = "Распознайте текст с помощью передовых нейросетей — быстро, точно, даже в шумной обстановке.",
             image = com.hfad.theme.R.drawable.outline_audio_file_24,
@@ -37,8 +32,8 @@ fun OnboardingScreen() {
         )
 
         1 -> SplashComponents(
-            background = EditScreen,
-            dividerColor = TranscriptionDivider,
+            background = blueCard,
+            dividerColor = cyan,
             title = "Умное редактирование",
             description = "Нейросеть сама оформит текст: расставит пунктуацию, абзацы и заголовки",
             image = com.hfad.theme.R.drawable.lamp,
@@ -48,8 +43,8 @@ fun OnboardingScreen() {
         )
 
         2 -> SplashComponents(
-            background = SimpleEditScreen,
-            dividerColor = SimpleEditDivider,
+            background = purple,
+            dividerColor = purpleBright,
             title = "Простое редактирование",
             description = "Или отредактируйте вручную — с удобным и интуитивным редактором.",
             image = com.hfad.theme.R.drawable.notes,
@@ -59,8 +54,8 @@ fun OnboardingScreen() {
         )
 
         3 -> SplashComponents(
-            background = SaveScreen,
-            dividerColor = SaveDivider,
+            background = blueBright,
+            dividerColor = cyan,
             title = "Удобное сохранение",
             description = "Приложение даёт возможность сохранить проект как на телефоне, так и в приложении",
             image = com.hfad.theme.R.drawable.save,

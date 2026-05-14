@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,12 +41,26 @@ fun EditScreen(
 ) {
     val scope = rememberCoroutineScope()
 
-    var fileText by remember { mutableStateOf(TextFieldValue("")) }
+    val fileText = editViewModel.fileText.collectAsState()
+    val fileId = folderViewModel.selectedFileId.collectAsState()
 
     val showDialog = remember { mutableStateOf(false) }
 
     val state = editViewModel.editState.collectAsState()
 
+    LaunchedEffect(fileText.value) {
+        if (fileText.value.text.isNotEmpty()) {
+            editViewModel.updateEditState(EditUIState.IsFileSelected)
+        } else {
+            editViewModel.updateEditState(EditUIState.IsFileNotSelected)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            editViewModel.updateEditState(EditUIState.IsFileNotSelected)
+        }
+    }
     SideBarMenu(
         folderViewModel = folderViewModel,
         action = { drawerState ->
@@ -82,9 +98,12 @@ fun EditScreen(
                 when (state.value) {
                     EditUIState.IsFileNotSelected -> {
                         FileNotSelectView {
-                            fileText = TextFieldValue(
-                                text = it,
-                                selection = TextRange(it.length)
+                            editViewModel.updateFileText(
+                                TextFieldValue(
+                                    text = it,
+                                    selection = TextRange(it.length)
+                                )
+
                             )
                             editViewModel.updateEditState(EditUIState.IsFileSelected)
                         }
@@ -92,22 +111,30 @@ fun EditScreen(
 
                     EditUIState.IsFileSelected -> {
                         FileSelectView(
-                            fileText = fileText,
+                            fileText = fileText.value,
                             showDialog = showDialog,
                             action = {
-                                it.apply { fileText = it }
+                                it.apply { editViewModel.updateFileText(it) }
                             },
                             onValueChange = {
-                                fileText = it.copy(
-                                    annotatedString = AnnotatedString(
-                                        text = it.text,
-                                        spanStyles = fileText.annotatedString.spanStyles,
-                                        paragraphStyles = fileText.annotatedString.paragraphStyles
+                                editViewModel.updateFileText(
+                                    it.copy(
+                                        annotatedString = AnnotatedString(
+                                            text = it.text,
+                                            spanStyles = fileText.value.annotatedString.spanStyles,
+                                            paragraphStyles = fileText.value.annotatedString.paragraphStyles
+                                        )
                                     )
                                 )
                             },
                             onSaveToFolder = { name, content ->
-                                editViewModel.saveFile(name, content)
+                                fileId.value?.let {
+                                    folderViewModel.updateFileTranscription(
+                                        it,
+                                        name,
+                                        content
+                                    )
+                                }
 
                             }
                         )

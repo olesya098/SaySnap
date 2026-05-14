@@ -52,6 +52,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.hfad.theme.blueBright
+import com.hfad.theme.cyan
+import com.hfad.theme.deepBlue
+import com.hfad.theme.purple
+import com.hfad.theme.purpleBright
 import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
@@ -110,12 +115,6 @@ fun SplashScreen(onFinished: () -> Unit) {
         delay(5000)
         onFinished()
     }
-
-    val deepBlue = Color(0xFF2A2D4A)
-    val cyan = Color(0xFFAABFD8)
-    val purple = Color(0xFF8B8FC4)
-    val purpleBright = Color(0xFF9B8EC4)
-    val blueBright = Color(0xFF6B7DB5)
 
     Box(
         modifier = Modifier

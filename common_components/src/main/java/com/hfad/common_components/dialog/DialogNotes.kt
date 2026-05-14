@@ -18,6 +18,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.hfad.common_components.button.CustomButton
 import com.hfad.theme.LitePurple
 import com.hfad.theme.White
+import com.hfad.theme.blueBright
 
 @Composable
 fun DialogNotes(
@@ -47,7 +48,7 @@ fun DialogNotes(
                 )
                 CustomButton(
                     text = "Сохранить",
-                    color = LitePurple,
+                    color = blueBright,
                     modifier = Modifier,
                     onClick = {
                         onDismiss()

@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hfad.theme.LitePurple
+import com.hfad.theme.blueBright
 
 @Composable
 fun ButtonBorder(
@@ -33,7 +34,7 @@ fun ButtonBorder(
         ),
         border = BorderStroke(
             width = 2.dp,
-            LitePurple
+            blueBright
         ),
         shape = RoundedCornerShape(13.dp),
     ) {
